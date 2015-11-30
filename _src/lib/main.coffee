@@ -6,10 +6,10 @@
 # **npm modules**
 
 # **internal modules**
-configurator = require("../configurator")
+config = require("./config")
 Topics = require "./topics"
 Reader = require "./reader"
-Writer = require( "./writer" )
+Writer = ( require( "./writer" ) )( config.get() )
 utils = require( "../utils" )
 
 READERS = {}

@@ -7,13 +7,12 @@
 
 # **internal modules**
 utils = require( "../utils" )
-configurator = require("../configurator")
 
 class NsqBasic extends require( "../basic" )
 
 	# ## defaults
 	defaults: =>
-		_.extend super, 
+		_.extend super,
 			# **active** *Boolean* Configuration to (en/dis)abel the nsq recorder
 			active: false
 
@@ -23,18 +22,19 @@ class NsqBasic extends require( "../basic" )
 		return
 
 	fetchClientId: =>
-		if @config.clientId?
+		if _.isFunction( @config.clientId )
+			_cid = @config.clientId()
+			if not _.isString( @config.clientId )
+				@_handleError( null, "EINVALIDCLIENTID" )
+				return
+				
+			@config.clientId = _cid
 			return @config.clientId
-
-		_ip = utils.getIP( ( if configurator.get( "identifyByIpV6" ) then "IPv6" else "IPv4" ), false )
-		_version = configurator.get( "server_care" ).version.replace( /\./g, "_" )
-		switch root._milon_servertype
-			when "admin"
-				_severname = "studio"
-			else
-				_severname = root._milon_servertype
-		@config.clientId = _version + ":" + _severname + ":" + _ip
-
+		
+		if _.isString( @config.clientId )
+			return @config.clientId
+		
+		@_handleError( null, "EINVALIDCLIENTID" )
 		return @config.clientId
 
 	connect: =>
@@ -89,5 +89,6 @@ class NsqBasic extends require( "../basic" )
 		return _.extend {}, super,
 			# Exceptions
 			"ENSQOFF": "Nsq is currently disabled"
+			"EINVALIDCLIENTID"; [ 406, "The given clientId option is invalid. It has to be a String or function returning a string" ]
 
 module.exports = NsqBasic

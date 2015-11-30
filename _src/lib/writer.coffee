@@ -7,14 +7,14 @@
 nsq = require 'nsqjs'
 
 # **internal modules**
-configurator = require("../configurator")
+config = require("./config")
 
 
 class NsqWriter extends require( "./basic" )
 	
 	# ## defaults
 	defaults: =>
-		_.extend super, 
+		_.extend super,
 			# **host** *String* Host of a nsqd
 			host: "127.0.0.1"
 			# **port** *Number* Port of a nsqd
@@ -71,7 +71,4 @@ class NsqWriter extends require( "./basic" )
 
 		return
 
-
-
-
-module.exports = new NsqWriter( configurator.getConfig( "nsq" ) )
+module.exports = new NsqWriter( config.get() )

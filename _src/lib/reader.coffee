@@ -7,7 +7,6 @@
 nsq = require 'nsqjs'
 
 # **internal modules**
-configurator = require("../configurator")
 
 class NsqReader extends require( "./basic" )
 
@@ -95,6 +94,4 @@ class NsqReader extends require( "./basic" )
 		return
 
 
-_cnf = configurator.getConfig( "nsq" )
-module.exports = ( logger, topic, channel )->
-	return new NsqReader( logger, topic, channel, _cnf )
+module.exports = NsqReader

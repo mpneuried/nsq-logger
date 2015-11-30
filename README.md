@@ -1,70 +1,31 @@
-nsq-topics
+nsq-logger
 ============
 
-[![Build Status](https://secure.travis-ci.org/mpneuried/nsq-topics.png?branch=master)](http://travis-ci.org/mpneuried/nsq-topics)
-[![Build Status](https://david-dm.org/mpneuried/nsq-topics.png)](https://david-dm.org/mpneuried/nsq-topics)
-[![NPM version](https://badge.fury.io/js/nsq-topics.png)](http://badge.fury.io/js/nsq-topics)
+[![Build Status](https://secure.travis-ci.org/mpneuried/nsq-logger.png?branch=master)](http://travis-ci.org/mpneuried/nsq-logger)
+[![Build Status](https://david-dm.org/mpneuried/nsq-logger.png)](https://david-dm.org/mpneuried/nsq-logger)
+[![NPM version](https://badge.fury.io/js/nsq-logger.png)](http://badge.fury.io/js/nsq-logger)
 
-Nsq helper to poll a nsqlookupd service for all it's topics and mirror it locally.
+Nsq helper to poll a nsqlookupd service for all it's logger and mirror it locally.
 
-[![NPM](https://nodei.co/npm/nsq-topics.png?downloads=true&stars=true)](https://nodei.co/npm/nsq-topics/)
+[![NPM](https://nodei.co/npm/nsq-logger.png?downloads=true&stars=true)](https://nodei.co/npm/nsq-logger/)
 
 **INFO: all examples are written in coffee-script**
 
 ## Install
 
 ```
-  npm install nsq-topics
+  npm install nsq-logger
 ```
 
 ## Initialize
 
 ```js
-new NsqTopics( config );
+new NsqLogger( config );
 ```
 
 **Example:**
 
 ```js
-var NsqTopics = require( "nsq-topics" )
-
-var topics = new NsqTopics({
-    // Listen to two local nsq lookupservers
-    "lookupdHTTPAddresses": [ "127.0.0.1:4161", "127.0.0.1:4163" ]
-});
-
-// get the current list of topics
-topics.list( function( err, topics ){
-    if( err ){
-        // handle the error
-    }
-    console.log( topics ) // -> an array of topics. E.g.: ( )`users`, `logins`, ... )
-
-
-    // listen for new topics
-    topics.on( "add", function( topic ){
-        // called until a new topic arrived
-    });
-
-    // listen for removed topics
-    topics.on( "remove", function( topic ){
-        // called until a topic was removed
-    });
-
-    // listen for topic list changes
-    topics.on( "change", function( topicList ){
-        // beside the `add` and `remove` events a single "change" event will be emitted
-    });
-
-    // setting a filter to only listen to specific topics
-    topics.filter( [ "user", "logins", "posts" ] );
-
-    // listen for errors
-    topics.on( "error", function( err ){
-        // E.g. called if a invalid filter was used or no lookup server is available
-    });
-
-});
 ```
 
 **Config** 

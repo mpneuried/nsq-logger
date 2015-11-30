@@ -1,0 +1,41 @@
+{
+  "name": "nsq-logger",
+  "version": "0.0.1",
+  "description": "A nsq reader factory to handle readers multiple topics based on the `nsq-topics` module",
+  "keywords": [],
+  "homepage": "https://github.com/mpneuried/nsq-logger",
+  "bugs": "https://github.com/mpneuried/nsq-logger/issues",
+  "author": {
+    "name": "mpneuried",
+    "email": "",
+    "url": "https://github.com/nsq-logger"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mpneuried/nsq-logger.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mpbasic": "0.0.x",
+    "nsq-topics": "0.0.2",
+    "nsqjs": "^0.7.8"
+  },
+  "devDependencies": {
+    "grunt": "0.4.x",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-docker": "0.0.x",
+    "grunt-include-replace": "*",
+    "grunt-mocha-cli": "*",
+    "grunt-regarde": "*",
+    "morgan": "^1.6.1",
+    "should": "4.3.x"
+  }
+}

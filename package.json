@@ -23,11 +23,14 @@
   },
   "license": "MIT",
   "dependencies": {
+    "extend": "^3.0.0",
+    "lodash": "^3.10.0",
     "mpbasic": "0.0.x",
-    "nsq-topics": "0.0.2",
+    "nsq-topics": "0.0.x",
     "nsqjs": "^0.7.8"
   },
   "devDependencies": {
+    "async": "^1.5.0",
     "grunt": "0.4.x",
     "grunt-contrib-clean": "*",
     "grunt-contrib-coffee": "*",
@@ -35,7 +38,9 @@
     "grunt-include-replace": "*",
     "grunt-mocha-cli": "*",
     "grunt-regarde": "*",
+    "hyperrequest": "0.0.x",
     "morgan": "^1.6.1",
+    "nsq-bundle": "^2.0.1",
     "should": "4.3.x"
   }
 }

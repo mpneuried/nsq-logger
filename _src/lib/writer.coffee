@@ -7,14 +7,12 @@
 nsq = require 'nsqjs'
 
 # **internal modules**
-config = require("./config")
-
 
 class NsqWriter extends require( "./basic" )
 	
 	# ## defaults
 	defaults: =>
-		_.extend super,
+		@extend super,
 			# **host** *String* Host of a nsqd
 			host: "127.0.0.1"
 			# **port** *Number* Port of a nsqd
@@ -29,15 +27,15 @@ class NsqWriter extends require( "./basic" )
 
 	constructor: ->
 		@connected = false
-
 		super
-		if not @config.active
-			@log "warning", "nsq writer disabled"
-			return
-
-		@fetchClientId()
-
+		
 		@publish = @_waitUntil( @_publish, "connected" )
+		
+		if not @config.active
+			@warning "nsq writer disabled"
+			return
+		
+		@fetchClientId()
 		return
 
 	_initClient: =>
@@ -50,9 +48,10 @@ class NsqWriter extends require( "./basic" )
 		@client.on( nsq.Writer.CLOSED, @onDisconnect )
 
 		@client.on nsq.Writer.ERROR, ( err )=>
-			@log "error", "nsq error", err
+			@error "nsq error", err
 			return
-
+		
+		@debug "init writer client", @client
 		return @client
 
 	_publish: ( topic, data, cb )=>
@@ -60,15 +59,18 @@ class NsqWriter extends require( "./basic" )
 			@_handleError( cb, "ENSQOFF" )
 			return
 
-		@log "debug", "publish", topic
+		@debug "publish", topic
 		@client.publish topic, JSON.stringify(data), ( err )=>
 			if err
-				cb( err )
+				if cb?
+					cb( err )
+				else
+					@error( "publish to topic `#{topic}`", err )
 				return
-			@log( "debug", "send data to `#{topic}`" )
-			cb( null )
+			@debug "send data to `#{topic}`"
+			cb( null ) if cb?
 			return
 
 		return
 
-module.exports = new NsqWriter( config.get() )
+module.exports = new NsqWriter()

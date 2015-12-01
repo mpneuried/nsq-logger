@@ -4,22 +4,26 @@
 # A reader factory to spin up on reader per topic
 
 # **npm modules**
+_ = require( "lodash" )
 
 # **internal modules**
-config = require("./config")
+config = require "./config"
 Topics = require "./topics"
 Reader = require "./reader"
-Writer = ( require( "./writer" ) )( config.get() )
-utils = require( "../utils" )
+Writer = require "./writer"
 
 READERS = {}
 
 class NsqLogger extends require( "./basic" )
 	# ## defaults
 	defaults: =>
-		_.extend super,
+		@extend super,
 			# **loggerChannel** *String* The channel name for the logger to each topic
 			loggerChannel: "actionlog"
+			# **exceededTopic** *String* A topic name, that will store exceeded messages.
+			exceededTopic: "_exceeded"
+			# **ignoreTopics** *String[]|Function* A list of topics that should be ignored or a function that will called to check the ignored topics manually
+			ignoreTopics: null
 
 	constructor: ( options )->
 		@ready = false
@@ -38,8 +42,14 @@ class NsqLogger extends require( "./basic" )
 
 		# add a topic filter to only connect to topics that do not start with a "_"
 		Topics.filter ( testT )=>
-			if testT[0] is "_"
+			if testT is @config.exceededTopic
 				return false
+			if not @config.ignoreTopics?
+				return true
+			if _.isArray( @config.ignoreTopics ) and testT in @config.ignoreTopics
+				return false
+			if _.isFunction( @config.ignoreTopics )
+				return @config.ignoreTopics( testT )
 			return true
 
 		Topics.list ( err, topics )=>
@@ -57,9 +67,28 @@ class NsqLogger extends require( "./basic" )
 			Topics.on "add", @addReader
 			Topics.on "remove", @removeReader
 
-			@ready = false
+			@ready = true
 			@emit( "ready" )
 			return
+		return
+		
+	destroy: ( cb )=>
+		@warning "destroy logger"
+		if not @ready
+			return
+		
+		_count = Object.keys( READERS ).length
+		
+		Writer.destroy =>
+			@warning "destroy #{_count} readers"
+			for _name, _reader of READERS
+				READERS[ _name ].destroy ->
+					_count--
+					if _count <= 0
+						cb()
+					return
+			return
+			
 		return
 
 	addReader: ( topic )=>
@@ -88,28 +117,25 @@ class NsqLogger extends require( "./basic" )
 		return
 
 	message: ( topic, data, cb )=>
-		console.log "MESSGAGE", topic, data
-		# TODO write log
-		cb()
+		@emit( "message", topic, data, cb )
 		return
 
 	exceeded: ( topic, data )=>
-		_data = 
+		_data =
 			topic: topic
 			payload: data
 
 		Writer.connect()
-		Writer.publish "_exceeded", _data , ( err )=>
+		Writer.publish @config.exceededTopic, _data , ( err )=>
 			if err
 				@log "error", "write messag to exceeded list", err
-			return 
+			return
 		return
 
 	ERRORS: =>
-		return _.extend {}, super,
+		return @extend {}, super,
 			# Exceptions
-			"EREADEREXISTS": "A reader for the topic `{{topic}}` allready exists"
-			"EREADERNOTFOUND": "The reader for the topic `{{topic}}` was not found"
+			"EREADEREXISTS": [ 409, "A reader for the topic `{{topic}}` allready exists" ]
+			"EREADERNOTFOUND": [ 404, "The reader for the topic `{{topic}}` was not found" ]
 
-
-module.exports = new NsqLogger( configurator.getConfig( "nsq" ) )
+module.exports = new NsqLogger()

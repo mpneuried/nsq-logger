@@ -4,17 +4,18 @@
 # a collection of shared nsq methods
 
 # **npm modules**
+_ = require( "lodash" )
 
 # **internal modules**
-utils = require( "../utils" )
+config = require( "./config" )
 
-class NsqBasic extends require( "../basic" )
+class NsqBasic extends require( "mpbasic" )( config )
 
 	# ## defaults
 	defaults: =>
-		_.extend super,
+		@extend super,
 			# **active** *Boolean* Configuration to (en/dis)abel the nsq recorder
-			active: false
+			active: true
 
 	constructor: ->
 		@connected = false
@@ -44,19 +45,19 @@ class NsqBasic extends require( "../basic" )
 		@_initClient()
 
 		if not @connected
-			@disconnect = false
-			@log "warning", "try to connect"
+			@disconnecting = false
+			@log "info", "try to connect"
 			@client.connect()
 		return
 
 	disconnect: =>
-		@disconnect = true
+		@disconnecting = true
 		@client.close()
 		return
 
 	reconnect: =>
 		# do not reconnect if it's a manual disconnect
-		if @disconnect
+		if @disconnecting
 			return
 		# try a reconnect every 5 sec until the client is online again
 		@t_reconnect = setTimeout( =>
@@ -77,18 +78,29 @@ class NsqBasic extends require( "../basic" )
 		return
 
 	onDisconnect: =>
-		@log "warning", "connection lost"
+		@log "warning", "connection lost" if not @disconnecting
 		# if it's currently marked as connected start reconnecting
-		if @connected
+		if @connected and not @disconnecting
 			@reconnect()
 		@connected = false
 		@emit( "disconnected" )
 		return
+	
+
+	destroy: ( cb )=>
+		if @connected
+			@disconnect()
+			@on "disconnected", ->
+				cb()
+				return
+			return
+		cb()
+		return
 
 	ERRORS: =>
-		return _.extend {}, super,
+		return @extend {}, super,
 			# Exceptions
-			"ENSQOFF": "Nsq is currently disabled"
-			"EINVALIDCLIENTID"; [ 406, "The given clientId option is invalid. It has to be a String or function returning a string" ]
+			"ENSQOFF": [ 500, "Nsq is currently disabled"]
+			"EINVALIDCLIENTID": [ 406, "The given clientId option is invalid. It has to be a String or function returning a string" ]
 
 module.exports = NsqBasic

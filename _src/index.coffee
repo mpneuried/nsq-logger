@@ -1,11 +1,17 @@
 exports.version = '@@version'
 
-exports.
+config = require './lib/config'
 
-module.exports = ( config )->
+module.exports = ( _cnf )->
+	config.set( _cnf )
 	
-	return 
-		Writer: require './lib/writer'
-		Reader: require './lib/reader'
-		Basic: require './lib/basic'
-		Logger: require './lib/main'
+	return {
+		config: config
+		writer: require './lib/writer'
+		topics: require './lib/topics'
+		configure: ( cnf )->
+			return config.set( _cnf )
+		getReader: require './lib/reader'
+		create: ->
+			return require './lib/logger'
+	}

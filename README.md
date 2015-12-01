@@ -20,12 +20,31 @@ Nsq helper to poll a nsqlookupd service for all it's logger and mirror it locall
 ## Initialize
 
 ```js
-new NsqLogger( config );
+var NSQLogging = NSQLogger( config );
+var logger = NSQLogging.create(); // create the logger instance
 ```
 
 **Example:**
 
 ```js
+var NSQLogger = require( "nsq-logger" );
+
+var config = {
+    clientId: "myFooClient"
+};
+
+// create the logger
+var logger = NSQLogger.create();
+// get the internal writer
+var writer = NSQLogger.writer;
+
+logger.on( "message", function( topic, data, cb ){
+    // process your topic
+    cb(); // mark message as done
+});
+
+writer.connect();
+writer.publish( "topic23", "To some Stuff!" );
 ```
 
 **Config** 

@@ -68,7 +68,7 @@ class Deamons extends require( "events" ).EventEmitter
 		if process.env.NSQLOG
 			console.log "START #{ @basepath }/#{options.bin} #{_args.join( " " )}" if process.env.NSQLOG
 		else
-			console.log "START #{options.bin} #{_args.join( " " )}"
+			console.log "START #{options.name}"
 		deamon = spawn( "#{ @basepath }/#{options.bin}", _args )
 
 		deamon.stdout.on "data", ( data )->
@@ -80,7 +80,7 @@ class Deamons extends require( "events" ).EventEmitter
 			return
 
 		deamon.on "close", ( data )->
-			console.log "#{options.name} - Closed", data
+			console.log "STOPPED #{options.name}"
 			closed()
 			return
 		

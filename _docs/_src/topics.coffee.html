@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>topics.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "_src/topics.coffee", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#nsqtopics%20wrapper">NsqTopics Wrapper</a>
+      </div>
+      <div class="heading h3">
+        <a href="#uses%20nsqtopics">uses NsqTopics</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="nsqtopics%20wrapper">
+  <h1>
+    <a href="#nsqtopics%20wrapper" name="nsqtopics%20wrapper" class="pilcrow">&#182;</a>
+    NsqTopics Wrapper
+  </h1>
+</div>
+
+
+
+<div class="pilwrap" id="uses%20nsqtopics">
+  <h3>
+    <a href="#uses%20nsqtopics" name="uses%20nsqtopics" class="pilcrow">&#182;</a>
+    uses <a href="https://github.com/mpneuried/nsq-topics">NsqTopics</a>
+  </h3>
+</div>
+
+
+<p>Create and configute a nsq-topics instance</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-5" id="line-5">5</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p><strong>npm modules</strong></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-7" id="line-7">7</a>  
+<a class="line-num" href="#line-8" id="line-8">8</a>  <span class="nv">NsqTopics = </span><span class="nx">require</span> <span class="s">&#39;nsq-topics&#39;</span>
+<a class="line-num" href="#line-9" id="line-9">9</a>  
+<a class="line-num" href="#line-10" id="line-10">10</a>  
+<a class="line-num" href="#line-11" id="line-11">11</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p><strong>internal modules</strong></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-10" id="line-10">10</a>  
+<a class="line-num" href="#line-11" id="line-11">11</a>  <span class="nv">config = </span><span class="nx">require</span><span class="p">(</span> <span class="s">&quot;./config&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-12" id="line-12">12</a>  
+<a class="line-num" href="#line-13" id="line-13">13</a>  <span class="nv">module.exports = </span><span class="k">new</span> <span class="nx">NsqTopics</span><span class="p">(</span> <span class="nx">config</span> <span class="p">)</span>
+<a class="line-num" href="#line-14" id="line-14">14</a>  </pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

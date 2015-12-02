@@ -20,39 +20,65 @@ Nsq helper to poll a nsqlookupd service for all it's logger and mirror it locall
 ## Initialize
 
 ```js
-var NSQLogging = NSQLogger( config );
-var logger = NSQLogging.create(); // create the logger instance
+var logger = new NsqLogger( config );
 ```
 
 **Example:**
 
 ```js
-var NSQLogger = require( "nsq-logger" );
+var NsqLogger = require( "nsq-logger" );
 
 var config = {
     clientId: "myFooClient"
 };
 
 // create the logger
-var logger = NSQLogger.create();
-// get the internal writer
-var writer = NSQLogger.writer;
+var logger = new NsqLogger( config );
 
-logger.on( "message", function( topic, data, cb ){
+// create a writer instance
+/*
+var NsqWriter = require( "nsq-logger/writer" );
+var writer = new NsqLogger( config );
+*/
+// or just grab the one used inside the logger
+var writer = logger.Writer;
+
+logger.on( "message", function( topic, data, done ){
     // process your topic
-    cb(); // mark message as done
+    // Example response: -> topic="topic23" data ="Do some Stuff!"
+    
+    // mark message as done
+    done();
 });
 
 writer.connect();
-writer.publish( "topic23", "To some Stuff!" );
+writer.publish( "topic23", "Do some Stuff!" );
 ```
+
+
 
 **Config** 
 
-- **lookupdHTTPAddresses** : *( `String|String[]` required )* A single or multiple nsqlookupd hosts. *This is also a configuration of ['nsqjs'](https://github.com/dudleycarr/nsqjs)*
-- **lookupdPollInterval** : *( `Number` optional: default = `60` )* Time in seconds to poll the nsqlookupd servers to sync the available topics. *This is also a configuration of ['nsqjs'](https://github.com/dudleycarr/nsqjs)*
-- **topicFilter** : *( `Null|String|Array|RegExp|Function` optional: default = `null` )* A filter to reduce the returned topics
-- **active** : *( `Boolean` optional: default = `true` )* Configuration to (de)activate the nsq topics on startup
+<a name="config"></a>
+
+- **clientId** : *( `String|Null` required )* An identifier used to disambiguate this client.
+- **active** : *( `Boolean` default=true )* Configuration to (en/dis)abel the nsq recorder
+- **loggerChannel** : *( `String` default="nsqlogger" )* The channel name for the logger to each topic
+- **exceededTopic** : *( `String` default="_exceeded" )* A topic name, that will store exceeded messages.
+- **ignoreTopics** : *( `String[]|Function` default=null )* A list of topics that should be ignored or a function that will called to check the ignored topics manually
+- **lookupdHTTPAddresses** : *( `Number` default=60 )* Time in seconds to poll the nsqlookupd servers to sync the availible topics
+- **maxInFlight** : *( `Number` default=1 )* The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.
+- **heartbeatInterval** : *( `Number` default=30 )* The frequency in seconds at which the nsqd will send heartbeats to this Reader.
+- **lookupdTCPAddresses** : *( `String[]` default=[ "127.0.0.1:4160", "127.0.0.1:4162" ] )* A list of nsq lookup servers
+- **lookupdHTTPAddresses** : *( `String[]` default=[ "127.0.0.1:4161", "127.0.0.1:4163" ] )* A list of nsq lookup servers
+- **maxAttempts** : *( `Number` default=10 )* The number of times to a message can be requeued before it will be handed to the DISCARD handler and then automatically finished. 0 means that there is no limit. If not DISCARD handler is specified and maxAttempts > 0, then the message will be finished automatically when the number attempts has been exhausted.
+- **messageTimeout** : *( `Number|Null` default=null )* Message timeout in ms or `null` for no timeout
+- **sampleRate** : *( `Number|Null` default=null )* Deliver a percentage of all messages received to this connection. 1 <= sampleRate <= 99
+- **requeueDelay** : *( `Number|Null` default=5 )* The delay is in seconds. This is how long nsqd will hold on the message before attempting it again.
+- **host** : *( `String` default="127.0.0.1" )* Host of a nsqd
+- **port** : *( `Number` default=4150 )* Port of a nsqd
+- **deflate** : *( `Boolean` default=false )* Use zlib Deflate compression.
+- **deflateLevel** : *( `Number` default=6 )* Use zlib Deflate compression level.
 
 
 ## Methods
@@ -81,96 +107,41 @@ Test if the module is currently active
 
 *( Boolean )*: Is active?
 
-### `.list( cb )`
 
-Get a list of the current topics
+### `.destroy( cb )`
 
-* `cb` : *( `Function` optional )*: Callback to get the list of topics
+This will stop all readers and disconnect every connection from nsq
 
-**Return**
+**Arguments** 
 
-*( Self )*: The instance itself for chaining.
-
-**Example:**
-
-```js
-topics.list( function( err, topics ){
-    if( err ){
-        // handle the error
-    }
-    console.log( topics ) // -> an array of topics. E.g.: ( )`users`, `logins`, ... )
-});
-```
+- **cb** : *( `Function` )* Called after destroy
 
 ## Events
 
-### `add`
+### `message`
 
-A new topic was added
+The main event to catch and process messages from all topics.
 
 **Arguments** 
 
-- **topic** : *( `String` )* The new topic
+- **topic** : *( `String` )* The topic of this message
+- **data** : *( `String|Object|Array` )* The message content. It tries to JSON.parse the message if possible. Otherwise it will be just a string.
+- **done** : *( `String` )* You have to call this function until the message was processed. This will remove the message from the queue. Otherwise it will be requeued. If you add a argument `cb( new Error("Dooh!") )` it will interpreted as an error and this message be requeued immediately 
 
 **Example:**
 
 ```js
-topics.on( "add", function( topic ){
-    // called until a new topic arrived
+logger.on( "message", function( topic, data, done ){
+    // process your message.
+    // E.g: writing the data to a db with the topic as tablename
+    myDB.write( "INSERT INTO " + topic + " VALUES ( " + data + " )", done );
 });
 ```
 
-### `remove`
-
-A existing topic was removed
-
-**Arguments** 
-
-- **topic** : *( `String` )* The removed topic
-
-**Example:**
-
-```js
-topics.on( "remove", function( topic ){
-    // called until a topic was removed
-});
-```
-
-### `change`
-
-The list of topics changed
-
-**Arguments** 
-
-- **topics** : *( `String[]` )* A list of current topics
-
-**Example:**
-
-```js
-topics.on( "change", function( topicList ){
-    // beside the `add` and `remove` events a single "change" event will be emitted
-});
-```
-
-### `error`
-
-An error occurred. E.g. called if a invalid filter was used or no lookup server is available
-
-**Arguments** 
-
-- **err** : *( `Error` )* The error object. 
-
-**Example:**
-
-```js
-topics.on( "error", function( err ){
-    // handle the error
-});
-```
 
 ### `ready`
 
-Emitted once the list of topics where received the first time.
+Emitted once the list of topics was received and the readers are created and connected.
 This is just an internal helper. The Method `list` will also wait for the first response. The events `add`, `remove` and `change` are active after this first response.
 **Example:**
 
@@ -180,9 +151,382 @@ topics.on( "ready", function( err ){
 });
 ```
 
+## Properties
+
+### `logger.config`
+
+<a name="logger-prop-config"></a>
+
+Type: *( Config )*
+
+This is the internaly used configuration.
+
+**Attributes**
+
+See [logger config](#config)
+
+### `logger.Writer`
+
+Type: *( NsqWriter )*
+
+To write messages you can use the internal writer instance.
+
+Details see [Writer](#writer)
+
+### `logger.Topics`
+
+Type: *( NsqTopics )*
+
+The logger uses a module called [`nsq-topics`](https://github.com/mpneuried/nsq-topics) to sync the existing topics and generate the readers for each topic.
+You can grab the internal used insatnce with `logger.Topics`
+
+Details see [`nsq-topics`](https://github.com/mpneuried/nsq-topics)
+
+### `logger.ready`
+
+Type: *( Boolean )*
+
+The logger is ready to use
+
+----
+
+# Writer
+
+<a name="writer"></a>
+
+## Initialize
+
+```js
+var NsqWriter = require( "nsq-logger/writer" )
+```
+
+**Example:**
+
+```js
+var NsqWriter = require( "nsq-logger/writer" );
+
+var config = {
+    clientId: "myFooClient",
+    host: "127.0.0.1",
+    port: 4150
+};
+
+// create the writer
+var writer = new NsqWriter( config );
+
+writer.connect();
+writer.publish( "topic23", "Do some Stuff!" );
+```
+
+**Config** 
+
+<a name="writer-config"></a>
+
+- **clientId** : *( `String|Null` required )* An identifier used to disambiguate this client.
+- **active** : *( `Boolean` default=true )* Configuration to (en/dis)abel the nsq recorder
+- **host** : *( `String` default="127.0.0.1" )* Host of a nsqd
+- **port** : *( `Number` default=4150 )* Port of a nsqd
+- **deflate** : *( `Boolean` default=false )* Use zlib Deflate compression.
+- **deflateLevel** : *( `Number` default=6 )* Use zlib Deflate compression level.
+
+
+## Methods
+
+### `.connect()`
+
+You have to connect the writer before publishing data
+
+**Return**
+
+*( Writer )*: retuns itself for chaining
+
+### `.disconnect()`
+
+disconnect the client
+
+**Return**
+
+*( Writer )*: retuns itself for chaining
+
+### `.publish()`
+
+You have to connect the writer before publishing data
+
+**Arguments** 
+
+- **topic** : *( `String` )* Topic name
+- **data** : *( `String|Object|Array` )* Data to publish. If it's not a string it will be JSON stringified
+- **cb** : *( `Function` )* Called after a successful publish
+
+**Return**
+
+*( Writer )*: retuns itself for chaining
+
+**Example:**
+
+```js
+writer
+  .connect()
+  .publish(
+  	"hello", // the topic
+  	JSON.strinigify( { to: [ "nsq-logger" ] } ) // the data to send
+  );
+```
+
+### `.activate()`
+
+Activate the module
+
+**Return**
+
+*( Boolean )*: `true` if it is now activated. `false` if it was already active
+
+### `.deactivate()`
+
+Deactivate the module
+
+**Return**
+
+*( Boolean )*: `true` if it is now deactivated. `false` if it was already inactive
+
+### `.active()`
+
+Test if the module is currently active
+
+**Return**
+
+*( Boolean )*: Is active?
+
+
+### `.destroy( cb )`
+
+Disconnect and remove all event listeners
+
+**Arguments** 
+
+- **cb** : *( `Function` )* Called after destroy
+
+## Events
+
+### `message`
+
+The main event to catch and process messages from all topics.
+
+**Arguments** 
+
+- **topic** : *( `String` )* The topic of this message
+- **data** : *( `String|Object|Array` )* The message content. A String or parsed JSON data.
+- **done** : *( `String` )* You have to call this function until the message was processed. This will remove the message from the queue. Otherwise it will be requeued. If you add a argument `cb( new Error("Dooh!") )` it will interpreted as an error and this message be requeued immediately 
+
+**Example:**
+
+```js
+logger.on( "message", function( topic, data, done ){
+    // process your message.
+    // E.g: writing the data to a db with the topic as tablename
+    myDB.write( "INSERT INTO " + topic + " VALUES ( " + data + " )", done );
+});
+```
+
+
+### `ready`
+
+Emitted once the list of topics was received and the readers are created and connected.
+This is just an internal helper. The Method `list` will also wait for the first response. The events `add`, `remove` and `change` are active after this first response.
+**Example:**
+
+```js
+topics.on( "ready", function( err ){
+    // handle the error
+});
+```
+
+## Properties
+
+### `writer.ready`
+
+Type: *( Boolean )*
+
+The writer is ready to use
+
+### `writer.connected`
+
+Type: *( Boolean )*
+
+The writer is connected to `nsqd`
+
+----
+
+# Reader
+
+<a name="reader"></a>
+
+## Initialize
+
+```js
+var NsqReader = require( "nsq-logger/reader" )
+var reader = NsqReader( topic, channel, config )
+```
+
+**Example:**
+
+```js
+var NsqReader = require( "nsq-logger/reader" );
+
+var config = {
+    clientId: "myFooClient",
+    lookupdTCPAddresses: "127.0.0.1:4160",
+    lookupdHTTPAddresses: "127.0.0.1: 4161",
+};
+
+// create the reader
+var reader = new NsqReader( "topic23", "channel42", config );
+
+
+reader.on( "message", function( topic, data, done ){
+    // process your topic
+    // Example response: -> data ="Do some Stuff!"
+    
+    // mark message as done
+    done();
+});
+reader.connect();
+```
+
+**Paramater** 
+
+**`NsqReader( topic, channel, config )`**
+
+- **topic** : *( `String ` required )* The topic to listen to
+- **channel** : *( `String` required )* The nsq channel to use or create
+- **config** : *( `Object|Config` )* [Configuration object](#reader-config) or a [config object](#logger-prop-config)
+ 
+**Config** 
+
+<a name="reader-config"></a>
+
+- **clientId** : *( `String|Null` required )* An identifier used to disambiguate this client.
+- **active** : *( `Boolean` default=true )* Configuration to (en/dis)abel the nsq recorder
+- **maxInFlight** : *( `Number` default=1 )* The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.
+- **heartbeatInterval** : *( `Number` default=30 )* The frequency in seconds at which the nsqd will send heartbeats to this Reader.
+- **lookupdTCPAddresses** : *( `String[]` default=[ "127.0.0.1:4160", "127.0.0.1:4162" ] )* A list of nsq lookup servers
+- **lookupdHTTPAddresses** : *( `String[]` default=[ "127.0.0.1:4161", "127.0.0.1:4163" ] )* A list of nsq lookup servers
+- **maxAttempts** : *( `Number` default=10 )* The number of times to a message can be requeued before it will be handed to the DISCARD handler and then automatically finished. 0 means that there is no limit. If not DISCARD handler is specified and maxAttempts > 0, then the message will be finished automatically when the number attempts has been exhausted.
+- **messageTimeout** : *( `Number|Null` default=null )* Message timeout in ms or `null` for no timeout
+- **sampleRate** : *( `Number|Null` default=null )* Deliver a percentage of all messages received to this connection. 1 <= sampleRate <= 99
+- **requeueDelay** : *( `Number|Null` default=5 )* The delay is in seconds. This is how long nsqd will hold on the message before attempting it again.
+
+
+## Methods
+
+### `.connect()`
+
+You have to connect the writer before publishing data
+
+**Return**
+
+*( Writer )*: retuns itself for chaining
+
+### `.disconnect()`
+
+disconnect the client
+
+**Return**
+
+*( Writer )*: retuns itself for chaining
+
+### `.activate()`
+
+Activate the module
+
+**Return**
+
+*( Boolean )*: `true` if it is now activated. `false` if it was already active
+
+### `.deactivate()`
+
+Deactivate the module
+
+**Return**
+
+*( Boolean )*: `true` if it is now deactivated. `false` if it was already inactive
+
+### `.active()`
+
+Test if the module is currently active
+
+**Return**
+
+*( Boolean )*: Is active?
+
+
+### `.destroy( cb )`
+
+Disconnect and remove all event listeners
+
+**Arguments** 
+
+- **cb** : *( `Function` )* Called after destroy
+
+## Events
+
+### `message`
+
+The main event to catch and process messages from the defined topic.
+
+**Arguments** 
+
+- **data** : *( `String|Object|Array` )* The message content. A String or parsed JSON data.
+- **done** : *( `String` )* You have to call this function until the message was processed. This will remove the message from the queue. Otherwise it will be requeued. If you add a argument `cb( new Error("Dooh!") )` it will interpreted as an error and this message be requeued immediately 
+
+**Example:**
+
+```js
+logger.on( "message", function( data, done ){
+    // process your message.
+    // E.g: writing the data to a db
+    myDB.write( "INSERT INTO mylogs VALUES ( " + data + " )", done );
+});
+```
+
+
+### `ready`
+
+Emitted once the list of topics was received and the readers are created and connected.
+This is just an internal helper. The Method `list` will also wait for the first response. The events `add`, `remove` and `change` are active after this first response.
+**Example:**
+
+```js
+topics.on( "ready", function( err ){
+    // handle the error
+});
+```
+
+## Properties
+
+### `writer.ready`
+
+Type: *( Boolean )*
+
+The writer is ready to use
+
+### `writer.connected`
+
+Type: *( Boolean )*
+
+The writer is connected to `nsqd`
+
+----
+
+## TODO's / IDEAS
+
+- more tests
+- use with promises
+
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.2|2015-12-02|Internal restructure and docs|
 |0.0.1|2015-12-02|Initial version|
 
 [![NPM](https://nodei.co/npm-dl/nsq-topics.png?months=6)](https://nodei.co/npm/nsq-topics/)

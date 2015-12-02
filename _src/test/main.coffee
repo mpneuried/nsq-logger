@@ -5,16 +5,15 @@ testData = require( "./data" )
 utils = require( "./utils" )
 
 testServers = require( "./nsq-deamons" )
-
+NsqLogger = require( "../." )
 
 CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1
 
-NsqLogger = null
-
 logger = null
 writer = null
+config = null
 
 
 
@@ -22,10 +21,11 @@ describe "----- nsq-logger TESTS -----", ->
 
 	before ( done )->
 		testServers.start ->
-			NsqLogger = require( "../." )( CNF )
+			logger = new NsqLogger( CNF )
 			
-			logger = NsqLogger.create()
-			writer = NsqLogger.writer
+			config = require( "../config" )
+			writer = logger.Writer
+			config = logger.config
 			writer.connect()
 			done()
 			return
@@ -33,7 +33,7 @@ describe "----- nsq-logger TESTS -----", ->
 
 	after ( done )->
 		@timeout( 10000 )
-		testData.cleanup NsqLogger.config.lookupdHTTPAddresses, ->
+		testData.cleanup config.lookupdHTTPAddresses, ->
 			logger.destroy ->
 				testServers.stop done
 				return

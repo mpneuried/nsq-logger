@@ -17,7 +17,7 @@ DEFAULTS =
 	
 	# **LOGGER**
 	# **loggerChannel** *String* The channel name for the logger to each topic
-	loggerChannel: "actionlog"
+	loggerChannel: "nsqlogger"
 	# **exceededTopic** *String* A topic name, that will store exceeded messages.
 	exceededTopic: "_exceeded"
 	# **ignoreTopics** *String[]|Function* A list of topics that should be ignored or a function that will called to check the ignored topics manually
@@ -54,6 +54,10 @@ DEFAULTS =
 	# **deflateLevel** *Number* Use zlib Deflate compression level.
 	deflateLevel: 6
 
+	logging:
+		severity: process.env[ "severity" ] or process.env[ "severity_nsq_logger"] or "warning"
+		severitys: "fatal,error,warning,info,debug".split( "," )
+
 addGetter = ( prop, _get, context )=>
 	_obj =
 		enumerable: true
@@ -83,21 +87,6 @@ class Config
 				@set( _k, _v )
 			return
 		@[ key ] = value
-		return
-		
-	get: ( name, logging = false )->
-		_cnf = {}
-		
-		if logging
-			logging =
-				logging:
-					severity: process.env[ "severity" ] or process.env[ "severity_#{name}"] or "warning"
-					severitys: "fatal,error,warning,info,debug".split( "," )
-			return extend( true, @, logging, _cnf )
-		else
-			return @
-	
+		return	
 
-	
-
-module.exports = new Config()
+module.exports = Config

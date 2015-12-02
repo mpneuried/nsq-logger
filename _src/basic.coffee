@@ -7,19 +7,34 @@
 _ = require( "lodash" )
 
 # **internal modules**
-config = require( "./config" )
+Config = require "./config"
 
-class NsqBasic extends require( "mpbasic" )( config )
+class NsqBasic extends require( "mpbasic" )()
 
-	# ## defaults
-	defaults: =>
-		@extend super,
-			# **active** *Boolean* Configuration to (en/dis)abel the nsq recorder
-			active: true
-
-	constructor: ->
+	constructor: ( options )->
 		@connected = false
-		super
+
+		@on "_log", @_log
+
+		@getter "classname", ->
+			return @constructor.name.toLowerCase()
+
+		# extend the internal config
+		if options instanceof Config
+			@config = options
+		else
+			@config = new Config( options )
+
+		if not @config.active
+			@log "warning", "disabled"
+			return
+
+		# init errors
+		@_initErrors()
+
+		@initialize( options )
+
+		@debug "loaded"
 		return
 
 	fetchClientId: =>
@@ -55,7 +70,7 @@ class NsqBasic extends require( "mpbasic" )( config )
 		@config.active = false
 		@disconnect()
 		return true
-		
+
 	connect: =>
 		if not @config.active
 			return
@@ -66,7 +81,7 @@ class NsqBasic extends require( "mpbasic" )( config )
 			@disconnecting = false
 			@log "info", "try to connect"
 			@client.connect()
-		return
+		return @
 
 	disconnect: =>
 		@disconnecting = true
@@ -106,9 +121,11 @@ class NsqBasic extends require( "mpbasic" )( config )
 	
 
 	destroy: ( cb )=>
+
 		if @connected
 			@disconnect()
 			@on "disconnected", ->
+				@removeAllListeners()
 				cb()
 				return
 			return

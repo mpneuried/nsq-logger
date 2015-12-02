@@ -56,7 +56,8 @@ module.exports = (grunt) ->
 				src: [ "test/main.js" ]
 				options:
 					env: 
-						severity_heartbeat: "debug"
+						#NSQERR: true
+						severity_nsq_logger: "warning"
 		
 		
 		docker:

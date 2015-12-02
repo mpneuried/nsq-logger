@@ -5,6 +5,7 @@
 
 # **npm modules**
 nsq = require 'nsqjs'
+_ = require 'lodash'
 
 # **internal modules**
 
@@ -25,9 +26,9 @@ class NsqWriter extends require( "./basic" )
 			# **clientId** *String|Null* An identifier used to disambiguate this client.
 			clientId: null
 
-	constructor: ->
+	constructor: ( options )->
 		@connected = false
-		super
+		super( options )
 		
 		@publish = @_waitUntil( @_publish, "connected" )
 		
@@ -60,7 +61,12 @@ class NsqWriter extends require( "./basic" )
 			return
 
 		@debug "publish", topic
-		@client.publish topic, JSON.stringify(data), ( err )=>
+		if _.isString()
+			_data = data
+		else
+			_data = JSON.stringify(data)
+
+		@client.publish topic, _data, ( err )=>
 			if err
 				if cb?
 					cb( err )
@@ -71,6 +77,6 @@ class NsqWriter extends require( "./basic" )
 			cb( null ) if cb?
 			return
 
-		return
+		return @
 
-module.exports = new NsqWriter()
+module.exports = NsqWriter

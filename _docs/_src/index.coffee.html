@@ -39,22 +39,8 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1" id="line-1">1</a>  <span class="nv">exports.version = </span><span class="s">&#39;@@version&#39;</span>
 <a class="line-num" href="#line-2" id="line-2">2</a>  
-<a class="line-num" href="#line-3" id="line-3">3</a>  <span class="nv">config = </span><span class="nx">require</span> <span class="s">&#39;./lib/config&#39;</span>
-<a class="line-num" href="#line-4" id="line-4">4</a>  
-<a class="line-num" href="#line-5" id="line-5">5</a>  <span class="nv">module.exports = </span><span class="nf">( _cnf )-&gt;</span>
-<a class="line-num" href="#line-6" id="line-6">6</a>    <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span> <span class="nx">_cnf</span> <span class="p">)</span>
-<a class="line-num" href="#line-7" id="line-7">7</a>    
-<a class="line-num" href="#line-8" id="line-8">8</a>    <span class="k">return</span> <span class="p">{</span>
-<a class="line-num" href="#line-9" id="line-9">9</a>      <span class="nv">config: </span><span class="nx">config</span>
-<a class="line-num" href="#line-10" id="line-10">10</a>      <span class="nv">writer: </span><span class="nx">require</span> <span class="s">&#39;./lib/writer&#39;</span>
-<a class="line-num" href="#line-11" id="line-11">11</a>      <span class="nv">topics: </span><span class="nx">require</span> <span class="s">&#39;./lib/topics&#39;</span>
-<a class="line-num" href="#line-12" id="line-12">12</a>      <span class="nv">configure: </span><span class="nf">( cnf )-&gt;</span>
-<a class="line-num" href="#line-13" id="line-13">13</a>        <span class="k">return</span> <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span> <span class="nx">_cnf</span> <span class="p">)</span>
-<a class="line-num" href="#line-14" id="line-14">14</a>      <span class="nv">getReader: </span><span class="nx">require</span> <span class="s">&#39;./lib/reader&#39;</span>
-<a class="line-num" href="#line-15" id="line-15">15</a>      <span class="nv">create: </span><span class="nf">-&gt;</span>
-<a class="line-num" href="#line-16" id="line-16">16</a>        <span class="k">return</span> <span class="nx">require</span> <span class="s">&#39;./lib/logger&#39;</span>
-<a class="line-num" href="#line-17" id="line-17">17</a>    <span class="p">}</span>
-<a class="line-num" href="#line-18" id="line-18">18</a>  </pre></div>
+<a class="line-num" href="#line-3" id="line-3">3</a>  <span class="nv">module.exports = </span><span class="nx">require</span> <span class="s">&#39;./logger&#39;</span>
+<a class="line-num" href="#line-4" id="line-4">4</a>  </pre></div>
         </td>
       </tr>
   </tbody>

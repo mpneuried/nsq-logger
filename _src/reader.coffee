@@ -38,13 +38,8 @@ class NsqReader extends require( "./basic" )
 		@connected = false
 
 		super( options )
-		if not @config.active
-			@log "warning", "nsq reader disabled"
-			return
 
 		@fetchClientId()
-
-		@connect()
 		return
 
 	_initClient: =>
@@ -72,7 +67,7 @@ class NsqReader extends require( "./basic" )
 		return
 
 	onMessage: ( msg )=>
-		@emit "message", @topic, msg.json(), ( err )=>
+		@emit "message", msg.json(), ( err )=>
 			if err
 				@log "error", "message processing", err
 				msg.requeue( @config.requeueDelay )
@@ -82,5 +77,4 @@ class NsqReader extends require( "./basic" )
 		return
 
 
-module.exports = ( logger, topic, channel )->
-	return new NsqReader( logger, topic, channel, config )
+module.exports = NsqReader

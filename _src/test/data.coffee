@@ -8,7 +8,7 @@ generatedTopics = []
 deleteTopic = ( host, topic )->
 	return ( cb )->
 		hyperrequest { url: "http://#{host}/delete_topic", qs: { topic: topic } }, ( err, resp )->
-			if resp.statusCode is 200
+			if resp?.statusCode is 200
 				cb( null, topic )
 			else
 				cb( resp.body )
@@ -16,7 +16,7 @@ deleteTopic = ( host, topic )->
 		return
 	
 deleteTopics = ( topics, hosts, cb )->
-	if not topics.length
+	if not topics?.length
 		cb()
 		return
 	aFns = []

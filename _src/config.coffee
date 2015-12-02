@@ -86,7 +86,10 @@ class Config
 			for _k, _v of key
 				@set( _k, _v )
 			return
-		@[ key ] = value
+		if _.isObject( @[ key ] ) and _.isObject( value )
+			@[ key ] = extend( true, {}, @[ key ], value )
+		else
+			@[ key ] = value
 		return	
 
 module.exports = Config

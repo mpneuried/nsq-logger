@@ -10,6 +10,8 @@ NsqLogger = require( "../." )
 CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1
+	logging:
+		severity: "error"
 
 logger = null
 writer = null

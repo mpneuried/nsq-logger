@@ -20,15 +20,15 @@ utils =
 	clone: (inp)->
 		return JSON.parse(JSON.stringify(inp))
 	
-	randomobj: ( depth = 0, opt = {} )->
+	randomobj: ( opt = {}, depth = 0 )->
 		tgrt={}
 		for i in [0..utils.randRange(1,( if opt.maxObjSize? then  opt.maxObjSize else 13 ))]
 			_key = utils.randomString( utils.randRange(2,32),0 )
 			if not tgrt[ _key ]?
-				tgrt[ _key ] = utils.randomdata( depth, opt )
+				tgrt[ _key ] = utils.randomdata( opt, depth )
 		return tgrt
 
-	randomdata: ( depth = 0, opt = {} )->
+	randomdata: ( opt = {} , depth = 0 )->
 		if depth >= ( if opt.maxDepth? then opt.maxDepth else 2 )
 			_i = utils.randRange(1,2)
 		else
@@ -43,9 +43,9 @@ utils =
 			when 3
 				_arr = []
 				for i in [0..utils.randRange(0,13)]
-					_arr.push utils.randomdata( _depth, opt )
+					_arr.push utils.randomdata( opt, _depth )
 				return _arr
 			when 4
-				return utils.randomobj( _depth, opt )
+				return utils.randomobj( opt, _depth )
 
 module.exports = utils

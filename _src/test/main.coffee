@@ -89,8 +89,8 @@ describe "----- nsq-logger TESTS -----", ->
 					writer.publish( tpc, data )
 			return
 			
-		it "test many messages within multiple topics", ( done )->
-			@timeout( 10000 )
+		it "test many json messages within multiple topics", ( done )->
+			@timeout( 20000 )
 			
 			logger.removeAllListeners( "message" )
 			
@@ -98,14 +98,15 @@ describe "----- nsq-logger TESTS -----", ->
 			for idx in [1..5]
 				_topic = testData.newTopic()
 				_topics[ _topic ] = []
-				for idx in [1..20]
-					_topics[ _topic ].push utils.randomString( utils.randRange( 1, 20 ) * 1024 )
+				for idx in [1..5]
+					_topics[ _topic ].push JSON.stringify( utils.randomobj( { maxObjSize: 5, maxDepth: 1, maxComplex: 1, maxStringLength: 50 } ) )
 		
 			logger.on "message", ( topic, data, cb )->
 				cb()
 				# wait for the previously generated topic
 				if _topics[topic]?
-					_idx = _topics[topic].indexOf( data )
+					# use stringified versions to find it within the list
+					_idx = _topics[topic].indexOf( JSON.stringify( data ) )
 					_topics[topic][ _idx ] = null
 					
 					if not _.compact( _topics[topic] ).length
@@ -115,10 +116,10 @@ describe "----- nsq-logger TESTS -----", ->
 						logger.removeAllListeners( "message" )
 						done()
 				return
-			
+			console.log "publish"
 			for tpc, datas of _topics
 				for data in datas
-					writer.publish( tpc, data )
+					writer.publish( tpc, JSON.parse( data ) )
 			return
 			
 		return

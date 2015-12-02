@@ -1,7 +1,13 @@
 spawn = require('child_process').spawn
+fs = require( "fs" )
 pathHelper = require( "path" )
 
 _ = require('lodash')
+
+_nsqDataPath = pathHelper.resolve( "./.nsqdata/" )
+
+try
+	fs.mkdirSync( _nsqDataPath )
 
 deamons = [
 	{
@@ -23,6 +29,7 @@ deamons = [
 		"bin": "nsqd"
 		"args": {
 			"lookupd-tcp-address": [ "127.0.0.1:4160", "127.0.0.1:4162" ]
+			"data-path": _nsqDataPath	
 		}
 	}
 ]

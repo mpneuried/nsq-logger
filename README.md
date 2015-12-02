@@ -183,8 +183,7 @@ topics.on( "ready", function( err ){
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.2|2015-11-30|Bugfixes; Tests; Docs|
-|0.0.1|2015-11-27|Initial commit|
+|0.0.1|2015-12-02|Initial version|
 
 [![NPM](https://nodei.co/npm-dl/nsq-topics.png?months=6)](https://nodei.co/npm/nsq-topics/)
 

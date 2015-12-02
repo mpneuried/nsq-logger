@@ -28,6 +28,9 @@ module.exports = (grunt) ->
 			base:
 				src: [ "lib", "test" ]
 
+			nsq:
+				src: [ ".nsqdata/" ]
+
 		includereplace:
 			pckg:
 				options:
@@ -89,7 +92,7 @@ module.exports = (grunt) ->
 	grunt.registerTask "default", "build"
 	grunt.registerTask "docs", "docker"
 	grunt.registerTask "clear", [ "clean:base" ]
-	grunt.registerTask "test", [ "mochacli:main" ]
+	grunt.registerTask "test", [ "mochacli:main", "clean:nsq" ]
 
 	# build the project
 	grunt.registerTask "build", [ "clear", "coffee:base", "includereplace" ]

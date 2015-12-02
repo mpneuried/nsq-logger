@@ -38,6 +38,24 @@ class NsqBasic extends require( "mpbasic" )( config )
 		@_handleError( null, "EINVALIDCLIENTID" )
 		return @config.clientId
 
+
+	active: =>
+		return @config.active
+			
+	activate: =>
+		if @config.active
+			return false
+		@config.active = true
+		@connect()
+		return true
+	
+	deactivate: =>
+		if not @config.active
+			return false
+		@config.active = false
+		@disconnect()
+		return true
+		
 	connect: =>
 		if not @config.active
 			return

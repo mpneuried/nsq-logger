@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>README.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "", thisFile = "README.md", defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#nsq-logger">nsq-logger</a>
+      </div>
+      <div class="heading h2">
+        <a href="#install">Install</a>
+      </div>
+      <div class="heading h2">
+        <a href="#initialize">Initialize</a>
+      </div>
+      <div class="heading h2">
+        <a href="#methods">Methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#.activate()">.activate()</a>
+      </div>
+      <div class="heading h3">
+        <a href="#.deactivate()">.deactivate()</a>
+      </div>
+      <div class="heading h3">
+        <a href="#.active()">.active()</a>
+      </div>
+      <div class="heading h3">
+        <a href="#.list(%20cb%20)">.list( cb )</a>
+      </div>
+      <div class="heading h2">
+        <a href="#events">Events</a>
+      </div>
+      <div class="heading h3">
+        <a href="#add">add</a>
+      </div>
+      <div class="heading h3">
+        <a href="#remove">remove</a>
+      </div>
+      <div class="heading h3">
+        <a href="#change">change</a>
+      </div>
+      <div class="heading h3">
+        <a href="#error">error</a>
+      </div>
+      <div class="heading h3">
+        <a href="#ready">ready</a>
+      </div>
+      <div class="heading h2">
+        <a href="#release%20history">Release History</a>
+      </div>
+      <div class="heading h2">
+        <a href="#the%20mit%20license%20(mit)">The MIT License (MIT)</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="docs markdown">
+<div class="pilwrap" id="nsq-logger">
+  <h1>
+    <a href="#nsq-logger" name="nsq-logger" class="pilcrow">&#182;</a>
+    nsq-logger
+  </h1>
+</div>
+
+
+<p><a href="http://travis-ci.org/mpneuried/nsq-logger"><img src="https://secure.travis-ci.org/mpneuried/nsq-logger.png?branch=master" alt="Build Status" title="" /></a>
+<a href="https://david-dm.org/mpneuried/nsq-logger"><img src="https://david-dm.org/mpneuried/nsq-logger.png" alt="Build Status" title="" /></a>
+<a href="http://badge.fury.io/js/nsq-logger"><img src="https://badge.fury.io/js/nsq-logger.png" alt="NPM version" title="" /></a></p>
+
+<p>Nsq helper to poll a nsqlookupd service for all it's logger and mirror it locally.</p>
+
+<p><a href="https://nodei.co/npm/nsq-logger/"><img src="https://nodei.co/npm/nsq-logger.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
+
+<p><strong>INFO: all examples are written in coffee-script</strong></p>
+
+
+<div class="pilwrap" id="install">
+  <h2>
+    <a href="#install" name="install" class="pilcrow">&#182;</a>
+    Install
+  </h2>
+</div>
+
+
+<div class='highlight'><pre><code language=''>  npm install nsq-logger
+</code></pre></div>
+
+
+<div class="pilwrap" id="initialize">
+  <h2>
+    <a href="#initialize" name="initialize" class="pilcrow">&#182;</a>
+    Initialize
+  </h2>
+</div>
+
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">NSQLogging</span> <span class="o">=</span> <span class="nx">NSQLogger</span><span class="p">(</span> <span class="nx">config</span> <span class="p">);</span>
+<span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">NSQLogging</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span> <span class="c1">// create the logger instance</span>
+</code></pre></div>
+
+
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">NSQLogger</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span> <span class="s2">&quot;nsq-logger&quot;</span> <span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">clientId</span><span class="o">:</span> <span class="s2">&quot;myFooClient&quot;</span>
+<span class="p">};</span>
+
+<span class="c1">// create the logger</span>
+<span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">NSQLogger</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+<span class="c1">// get the internal writer</span>
+<span class="kd">var</span> <span class="nx">writer</span> <span class="o">=</span> <span class="nx">NSQLogger</span><span class="p">.</span><span class="nx">writer</span><span class="p">;</span>
+
+<span class="nx">logger</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">topic</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">cb</span> <span class="p">){</span>
+    <span class="c1">// process your topic</span>
+    <span class="nx">cb</span><span class="p">();</span> <span class="c1">// mark message as done</span>
+<span class="p">});</span>
+
+<span class="nx">writer</span><span class="p">.</span><span class="nx">connect</span><span class="p">();</span>
+<span class="nx">writer</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span> <span class="s2">&quot;topic23&quot;</span><span class="p">,</span> <span class="s2">&quot;To some Stuff!&quot;</span> <span class="p">);</span>
+</code></pre></div>
+
+
+
+<p><strong>Config</strong> </p>
+
+<ul>
+<li><strong>lookupdHTTPAddresses</strong> : <em>( <code>String|String[]</code> required )</em> A single or multiple nsqlookupd hosts. <em>This is also a configuration of <a href="https://github.com/dudleycarr/nsqjs">'nsqjs'</a></em></li>
+<li><strong>lookupdPollInterval</strong> : <em>( <code>Number</code> optional: default = <code>60</code> )</em> Time in seconds to poll the nsqlookupd servers to sync the available topics. <em>This is also a configuration of <a href="https://github.com/dudleycarr/nsqjs">'nsqjs'</a></em></li>
+<li><strong>topicFilter</strong> : <em>( <code>Null|String|Array|RegExp|Function</code> optional: default = <code>null</code> )</em> A filter to reduce the returned topics</li>
+<li><strong>active</strong> : <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Configuration to (de)activate the nsq topics on startup</li>
+</ul>
+
+
+<div class="pilwrap" id="methods">
+  <h2>
+    <a href="#methods" name="methods" class="pilcrow">&#182;</a>
+    Methods
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id=".activate()">
+  <h3>
+    <a href="#.activate()" name=".activate()" class="pilcrow">&#182;</a>
+    <code>.activate()</code>
+  </h3>
+</div>
+
+
+<p>Activate the module</p>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Boolean )</em>: <code>true</code> if it is now activated. <code>false</code> if it was already active</p>
+
+
+<div class="pilwrap" id=".deactivate()">
+  <h3>
+    <a href="#.deactivate()" name=".deactivate()" class="pilcrow">&#182;</a>
+    <code>.deactivate()</code>
+  </h3>
+</div>
+
+
+<p>Deactivate the module</p>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Boolean )</em>: <code>true</code> if it is now deactivated. <code>false</code> if it was already inactive</p>
+
+
+<div class="pilwrap" id=".active()">
+  <h3>
+    <a href="#.active()" name=".active()" class="pilcrow">&#182;</a>
+    <code>.active()</code>
+  </h3>
+</div>
+
+
+<p>Test if the module is currently active</p>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Boolean )</em>: Is active?</p>
+
+
+<div class="pilwrap" id=".list(%20cb%20)">
+  <h3>
+    <a href="#.list(%20cb%20)" name=".list(%20cb%20)" class="pilcrow">&#182;</a>
+    <code>.list( cb )</code>
+  </h3>
+</div>
+
+
+<p>Get a list of the current topics</p>
+
+<ul>
+<li><code>cb</code> : <em>( <code>Function</code> optional )</em>: Callback to get the list of topics</li>
+</ul>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Self )</em>: The instance itself for chaining.</p>
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="nx">topics</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">topics</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+        <span class="c1">// handle the error</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">topics</span> <span class="p">)</span> <span class="c1">// -&gt; an array of topics. E.g.: ( )`users`, `logins`, ... )</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="events">
+  <h2>
+    <a href="#events" name="events" class="pilcrow">&#182;</a>
+    Events
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="add">
+  <h3>
+    <a href="#add" name="add" class="pilcrow">&#182;</a>
+    <code>add</code>
+  </h3>
+</div>
+
+
+<p>A new topic was added</p>
+
+<p><strong>Arguments</strong> </p>
+
+<ul>
+<li><strong>topic</strong> : <em>( <code>String</code> )</em> The new topic</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="nx">topics</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">topic</span> <span class="p">){</span>
+    <span class="c1">// called until a new topic arrived</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="remove">
+  <h3>
+    <a href="#remove" name="remove" class="pilcrow">&#182;</a>
+    <code>remove</code>
+  </h3>
+</div>
+
+
+<p>A existing topic was removed</p>
+
+<p><strong>Arguments</strong> </p>
+
+<ul>
+<li><strong>topic</strong> : <em>( <code>String</code> )</em> The removed topic</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="nx">topics</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">topic</span> <span class="p">){</span>
+    <span class="c1">// called until a topic was removed</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="change">
+  <h3>
+    <a href="#change" name="change" class="pilcrow">&#182;</a>
+    <code>change</code>
+  </h3>
+</div>
+
+
+<p>The list of topics changed</p>
+
+<p><strong>Arguments</strong> </p>
+
+<ul>
+<li><strong>topics</strong> : <em>( <code>String[]</code> )</em> A list of current topics</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="nx">topics</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">topicList</span> <span class="p">){</span>
+    <span class="c1">// beside the `add` and `remove` events a single &quot;change&quot; event will be emitted</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="error">
+  <h3>
+    <a href="#error" name="error" class="pilcrow">&#182;</a>
+    <code>error</code>
+  </h3>
+</div>
+
+
+<p>An error occurred. E.g. called if a invalid filter was used or no lookup server is available</p>
+
+<p><strong>Arguments</strong> </p>
+
+<ul>
+<li><strong>err</strong> : <em>( <code>Error</code> )</em> The error object. </li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="nx">topics</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+    <span class="c1">// handle the error</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="ready">
+  <h3>
+    <a href="#ready" name="ready" class="pilcrow">&#182;</a>
+    <code>ready</code>
+  </h3>
+</div>
+
+
+<p>Emitted once the list of topics where received the first time.
+This is just an internal helper. The Method <code>list</code> will also wait for the first response. The events <code>add</code>, <code>remove</code> and <code>change</code> are active after this first response.
+<strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="nx">topics</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s2">&quot;ready&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">err</span> <span class="p">){</span>
+    <span class="c1">// handle the error</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="release%20history">
+  <h2>
+    <a href="#release%20history" name="release%20history" class="pilcrow">&#182;</a>
+    Release History
+  </h2>
+</div>
+
+
+<p>|Version|Date|Description|
+|:--:|:--:|:--|
+|0.0.1|2015-12-02|Initial version|</p>
+
+<p><a href="https://nodei.co/npm/nsq-topics/"><img src="https://nodei.co/npm-dl/nsq-topics.png?months=6" alt="NPM" title="" /></a></p>
+
+<blockquote>
+  <p>Initially Generated with <a href="https://github.com/mpneuried/generator-mpnodemodule">generator-mpnodemodule</a></p>
+</blockquote>
+
+
+<div class="pilwrap" id="the%20mit%20license%20(mit)">
+  <h2>
+    <a href="#the%20mit%20license%20(mit)" name="the%20mit%20license%20(mit)" class="pilcrow">&#182;</a>
+    The MIT License (MIT)
+  </h2>
+</div>
+
+
+<p>Copyright © 2015 M. Peter, <a href='http://www.tcs.de'>http://www.tcs.de</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></div>
+  </div>
+</body>
+</html>

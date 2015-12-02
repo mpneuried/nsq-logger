@@ -116,7 +116,6 @@ describe "----- nsq-logger TESTS -----", ->
 						logger.removeAllListeners( "message" )
 						done()
 				return
-			console.log "publish"
 			for tpc, datas of _topics
 				for data in datas
 					writer.publish( tpc, JSON.parse( data ) )

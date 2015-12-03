@@ -14,6 +14,8 @@ DEFAULTS =
 	active: true
 	# **clientId** *String|Null* An identifier used to disambiguate this client.
 	clientId: null
+	# **namespace** *String* A namespace for the topics. This will be added/removed transparent to the topics. So only topics within this namespace a relevant.
+	namespace: null
 	
 	# **LOGGER**
 	# **loggerChannel** *String* The channel name for the logger to each topic
@@ -90,6 +92,6 @@ class Config
 			@[ key ] = extend( true, {}, @[ key ], value )
 		else
 			@[ key ] = value
-		return	
+		return
 
 module.exports = Config

@@ -42,46 +42,49 @@
 <a class="line-num" href="#line-3" id="line-3">3</a>  
 <a class="line-num" href="#line-4" id="line-4">4</a>  <span class="nv">utils = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;./utils&#39;</span><span class="p">)</span>
 <a class="line-num" href="#line-5" id="line-5">5</a>  
-<a class="line-num" href="#line-6" id="line-6">6</a>  <span class="nv">generatedTopics = </span><span class="p">[]</span>
-<a class="line-num" href="#line-7" id="line-7">7</a>  
-<a class="line-num" href="#line-8" id="line-8">8</a>  <span class="nv">deleteTopic = </span><span class="nf">( host, topic )-&gt;</span>
-<a class="line-num" href="#line-9" id="line-9">9</a>    <span class="k">return</span> <span class="nf">( cb )-&gt;</span>
-<a class="line-num" href="#line-10" id="line-10">10</a>      <span class="nx">hyperrequest</span> <span class="p">{</span> <span class="nv">url: </span><span class="s">&quot;http://</span><span class="si">#{</span><span class="nx">host</span><span class="si">}</span><span class="s">/delete_topic&quot;</span><span class="p">,</span> <span class="nv">qs: </span><span class="p">{</span> <span class="nv">topic: </span><span class="nx">topic</span> <span class="p">}</span> <span class="p">},</span> <span class="nf">( err, resp )-&gt;</span>
-<a class="line-num" href="#line-11" id="line-11">11</a>        <span class="k">if</span> <span class="nx">resp</span><span class="o">?</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">is</span> <span class="mi">200</span>
-<a class="line-num" href="#line-12" id="line-12">12</a>          <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">topic</span> <span class="p">)</span>
-<a class="line-num" href="#line-13" id="line-13">13</a>        <span class="k">else</span>
-<a class="line-num" href="#line-14" id="line-14">14</a>          <span class="nx">cb</span><span class="p">(</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">body</span> <span class="p">)</span>
-<a class="line-num" href="#line-15" id="line-15">15</a>        <span class="k">return</span>
-<a class="line-num" href="#line-16" id="line-16">16</a>      <span class="k">return</span>
-<a class="line-num" href="#line-17" id="line-17">17</a>    
-<a class="line-num" href="#line-18" id="line-18">18</a>  <span class="nv">deleteTopics = </span><span class="nf">( topics, hosts, cb )-&gt;</span>
-<a class="line-num" href="#line-19" id="line-19">19</a>    <span class="k">if</span> <span class="o">not</span> <span class="nx">topics</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
-<a class="line-num" href="#line-20" id="line-20">20</a>      <span class="nx">cb</span><span class="p">()</span>
-<a class="line-num" href="#line-21" id="line-21">21</a>      <span class="k">return</span>
-<a class="line-num" href="#line-22" id="line-22">22</a>    <span class="nv">aFns = </span><span class="p">[]</span>
-<a class="line-num" href="#line-23" id="line-23">23</a>    <span class="k">for</span> <span class="nx">host</span> <span class="k">in</span> <span class="nx">hosts</span>
-<a class="line-num" href="#line-24" id="line-24">24</a>      <span class="k">for</span> <span class="nx">topic</span> <span class="k">in</span> <span class="nx">topics</span>
-<a class="line-num" href="#line-25" id="line-25">25</a>        <span class="nx">aFns</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">deleteTopic</span><span class="p">(</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">topic</span><span class="p">)</span> <span class="p">)</span>
-<a class="line-num" href="#line-26" id="line-26">26</a>      
-<a class="line-num" href="#line-27" id="line-27">27</a>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;delete </span><span class="si">#{</span><span class="nx">topics</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s"> test topics ... &quot;</span>
-<a class="line-num" href="#line-28" id="line-28">28</a>    <span class="nx">async</span><span class="p">.</span><span class="nx">parallelLimit</span> <span class="nx">aFns</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="nf">( errs, topics )-&gt;</span>
-<a class="line-num" href="#line-29" id="line-29">29</a>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;... done!&quot;</span>
-<a class="line-num" href="#line-30" id="line-30">30</a>      <span class="nx">cb</span><span class="p">()</span>
-<a class="line-num" href="#line-31" id="line-31">31</a>      <span class="k">return</span>
-<a class="line-num" href="#line-32" id="line-32">32</a>    <span class="k">return</span>
-<a class="line-num" href="#line-33" id="line-33">33</a>  
-<a class="line-num" href="#line-34" id="line-34">34</a>  <span class="nv">module.exports =</span>
-<a class="line-num" href="#line-35" id="line-35">35</a>    <span class="nv">newTopic: </span><span class="nf">-&gt;</span>
-<a class="line-num" href="#line-36" id="line-36">36</a>      <span class="nv">_t = </span><span class="s">&quot;mochatest-&quot;</span> <span class="o">+</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">randomString</span><span class="p">(</span> <span class="mi">5</span> <span class="p">)</span>
-<a class="line-num" href="#line-37" id="line-37">37</a>      <span class="nx">generatedTopics</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_t</span> <span class="p">)</span>
-<a class="line-num" href="#line-38" id="line-38">38</a>      <span class="k">return</span> <span class="nx">_t</span>
-<a class="line-num" href="#line-39" id="line-39">39</a>      
-<a class="line-num" href="#line-40" id="line-40">40</a>    <span class="nv">cleanup: </span><span class="nf">( hosts, cb )-&gt;</span>
-<a class="line-num" href="#line-41" id="line-41">41</a>      
-<a class="line-num" href="#line-42" id="line-42">42</a>      <span class="nx">deleteTopics</span><span class="p">(</span> <span class="nx">generatedTopics</span><span class="p">,</span> <span class="nx">hosts</span><span class="p">,</span> <span class="nx">cb</span> <span class="p">)</span>
-<a class="line-num" href="#line-43" id="line-43">43</a>      
-<a class="line-num" href="#line-44" id="line-44">44</a>      <span class="k">return</span>
-<a class="line-num" href="#line-45" id="line-45">45</a>  </pre></div>
+<a class="line-num" href="#line-6" id="line-6">6</a>  
+<a class="line-num" href="#line-7" id="line-7">7</a>  <span class="nv">module.exports = </span><span class="nf">( namespace )-&gt;</span>
+<a class="line-num" href="#line-8" id="line-8">8</a>    
+<a class="line-num" href="#line-9" id="line-9">9</a>    <span class="nv">generatedTopics = </span><span class="p">[]</span>
+<a class="line-num" href="#line-10" id="line-10">10</a>    
+<a class="line-num" href="#line-11" id="line-11">11</a>    <span class="nv">deleteTopic = </span><span class="nf">( host, topic )-&gt;</span>
+<a class="line-num" href="#line-12" id="line-12">12</a>      <span class="k">return</span> <span class="nf">( cb )-&gt;</span>
+<a class="line-num" href="#line-13" id="line-13">13</a>        <span class="nx">hyperrequest</span> <span class="p">{</span> <span class="nv">url: </span><span class="s">&quot;http://</span><span class="si">#{</span><span class="nx">host</span><span class="si">}</span><span class="s">/delete_topic&quot;</span><span class="p">,</span> <span class="nv">qs: </span><span class="p">{</span> <span class="nv">topic: </span><span class="p">(</span> <span class="nx">namespace</span> <span class="o">or</span> <span class="s">&quot;&quot;</span> <span class="p">)</span> <span class="o">+</span> <span class="nx">topic</span> <span class="p">}</span> <span class="p">},</span> <span class="nf">( err, resp )-&gt;</span>
+<a class="line-num" href="#line-14" id="line-14">14</a>          <span class="k">if</span> <span class="nx">resp</span><span class="o">?</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">is</span> <span class="mi">200</span>
+<a class="line-num" href="#line-15" id="line-15">15</a>            <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">topic</span> <span class="p">)</span>
+<a class="line-num" href="#line-16" id="line-16">16</a>          <span class="k">else</span>
+<a class="line-num" href="#line-17" id="line-17">17</a>            <span class="nx">cb</span><span class="p">(</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">body</span> <span class="p">)</span>
+<a class="line-num" href="#line-18" id="line-18">18</a>          <span class="k">return</span>
+<a class="line-num" href="#line-19" id="line-19">19</a>        <span class="k">return</span>
+<a class="line-num" href="#line-20" id="line-20">20</a>      
+<a class="line-num" href="#line-21" id="line-21">21</a>    <span class="nv">deleteTopics = </span><span class="nf">( topics, hosts, cb )-&gt;</span>
+<a class="line-num" href="#line-22" id="line-22">22</a>      <span class="k">if</span> <span class="o">not</span> <span class="nx">topics</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
+<a class="line-num" href="#line-23" id="line-23">23</a>        <span class="nx">cb</span><span class="p">()</span>
+<a class="line-num" href="#line-24" id="line-24">24</a>        <span class="k">return</span>
+<a class="line-num" href="#line-25" id="line-25">25</a>      <span class="nv">aFns = </span><span class="p">[]</span>
+<a class="line-num" href="#line-26" id="line-26">26</a>      <span class="k">for</span> <span class="nx">host</span> <span class="k">in</span> <span class="nx">hosts</span>
+<a class="line-num" href="#line-27" id="line-27">27</a>        <span class="k">for</span> <span class="nx">topic</span> <span class="k">in</span> <span class="nx">topics</span>
+<a class="line-num" href="#line-28" id="line-28">28</a>          <span class="nx">aFns</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">deleteTopic</span><span class="p">(</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">topic</span><span class="p">)</span> <span class="p">)</span>
+<a class="line-num" href="#line-29" id="line-29">29</a>        
+<a class="line-num" href="#line-30" id="line-30">30</a>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;          delete </span><span class="si">#{</span><span class="nx">topics</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s"> test topics ... &quot;</span>
+<a class="line-num" href="#line-31" id="line-31">31</a>      <span class="nx">async</span><span class="p">.</span><span class="nx">parallelLimit</span> <span class="nx">aFns</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="nf">( errs, topics )-&gt;</span>
+<a class="line-num" href="#line-32" id="line-32">32</a>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;          ... done!&quot;</span>
+<a class="line-num" href="#line-33" id="line-33">33</a>        <span class="nx">cb</span><span class="p">()</span>
+<a class="line-num" href="#line-34" id="line-34">34</a>        <span class="k">return</span>
+<a class="line-num" href="#line-35" id="line-35">35</a>      <span class="k">return</span>
+<a class="line-num" href="#line-36" id="line-36">36</a>    <span class="k">return</span> <span class="p">{</span>
+<a class="line-num" href="#line-37" id="line-37">37</a>      <span class="nv">newTopic: </span><span class="nf">-&gt;</span>
+<a class="line-num" href="#line-38" id="line-38">38</a>        <span class="nv">_t = </span><span class="nx">utils</span><span class="p">.</span><span class="nx">randomString</span><span class="p">(</span> <span class="mi">5</span> <span class="p">)</span>
+<a class="line-num" href="#line-39" id="line-39">39</a>        <span class="nx">generatedTopics</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_t</span> <span class="p">)</span>
+<a class="line-num" href="#line-40" id="line-40">40</a>        <span class="k">return</span> <span class="nx">_t</span>
+<a class="line-num" href="#line-41" id="line-41">41</a>        
+<a class="line-num" href="#line-42" id="line-42">42</a>      <span class="nv">cleanup: </span><span class="nf">( hosts, cb )-&gt;</span>
+<a class="line-num" href="#line-43" id="line-43">43</a>        
+<a class="line-num" href="#line-44" id="line-44">44</a>        <span class="nx">deleteTopics</span><span class="p">(</span> <span class="nx">generatedTopics</span><span class="p">,</span> <span class="nx">hosts</span><span class="p">,</span> <span class="nx">cb</span> <span class="p">)</span>
+<a class="line-num" href="#line-45" id="line-45">45</a>        
+<a class="line-num" href="#line-46" id="line-46">46</a>        <span class="k">return</span>
+<a class="line-num" href="#line-47" id="line-47">47</a>    <span class="p">}</span>
+<a class="line-num" href="#line-48" id="line-48">48</a>  </pre></div>
         </td>
       </tr>
   </tbody>

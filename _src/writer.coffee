@@ -25,6 +25,8 @@ class NsqWriter extends require( "./basic" )
 			deflateLevel: 6
 			# **clientId** *String|Null* An identifier used to disambiguate this client.
 			clientId: null
+			# **namespace** *String* A namespace for the topics. This will be added/removed transparent to the topics. So only topics within this namespace a relevant.
+			namespace: null
 
 	constructor: ( options )->
 		@connected = false
@@ -60,13 +62,13 @@ class NsqWriter extends require( "./basic" )
 			@_handleError( cb, "ENSQOFF" )
 			return
 
-		@debug "publish", topic
+		@debug "publish", topic, @nsAdd( topic )
 		if _.isString()
 			_data = data
 		else
 			_data = JSON.stringify(data)
 
-		@client.publish topic, _data, ( err )=>
+		@client.publish @nsAdd( topic ), _data, ( err )=>
 			if err
 				if cb?
 					cb( err )

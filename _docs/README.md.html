@@ -258,10 +258,11 @@
 <ul>
 <li><strong>clientId</strong> : <em>( <code>String|Null</code> required )</em> An identifier used to disambiguate this client.</li>
 <li><strong>active</strong> : <em>( <code>Boolean</code> default=true )</em> Configuration to (en/dis)abel the nsq recorder</li>
+<li><strong>namespace</strong> : <em>( <code>String|Null</code> default=null )</em> Internally prefix the nsq topics. This will be handled transparent, but with this it's possible to separate different environments from each other. E.g. you can run a "staging" and "live" environment on one nsq cluster.</li>
 <li><strong>loggerChannel</strong> : <em>( <code>String</code> default="nsqlogger" )</em> The channel name for the logger to each topic</li>
 <li><strong>exceededTopic</strong> : <em>( <code>String</code> default="_exceeded" )</em> A topic name, that will store exceeded messages.</li>
 <li><strong>ignoreTopics</strong> : <em>( <code>String[]|Function</code> default=null )</em> A list of topics that should be ignored or a function that will called to check the ignored topics manually</li>
-<li><strong>lookupdHTTPAddresses</strong> : <em>( <code>Number</code> default=60 )</em> Time in seconds to poll the nsqlookupd servers to sync the availible topics</li>
+<li><strong>lookupdHTTPAddresses</strong> : <em>( <code>Number</code> default=60 )</em> Time in seconds to poll the nsqlookupd servers to sync the available topics</li>
 <li><strong>maxInFlight</strong> : <em>( <code>Number</code> default=1 )</em> The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.</li>
 <li><strong>heartbeatInterval</strong> : <em>( <code>Number</code> default=30 )</em> The frequency in seconds at which the nsqd will send heartbeats to this Reader.</li>
 <li><strong>lookupdTCPAddresses</strong> : <em>( <code>String[]</code> default=[ "127.0.0.1:4160", "127.0.0.1:4162" ] )</em> A list of nsq lookup servers</li>
@@ -534,6 +535,7 @@ You can grab the internal used insatnce with <code>logger.Topics</code></p>
 
 <ul>
 <li><strong>clientId</strong> : <em>( <code>String|Null</code> required )</em> An identifier used to disambiguate this client.</li>
+<li><strong>namespace</strong> : <em>( <code>String|Null</code> default=null )</em> Internally prefix the nsq topics. This will be handled transparent, but with this it's possible to separate different environments from each other. E.g. you can run a "staging" and "live" environment on one nsq cluster.</li>
 <li><strong>active</strong> : <em>( <code>Boolean</code> default=true )</em> Configuration to (en/dis)abel the nsq recorder</li>
 <li><strong>host</strong> : <em>( <code>String</code> default="127.0.0.1" )</em> Host of a nsqd</li>
 <li><strong>port</strong> : <em>( <code>Number</code> default=4150 )</em> Port of a nsqd</li>
@@ -846,6 +848,7 @@ This is just an internal helper. The Method <code>list</code> will also wait for
 
 <ul>
 <li><strong>clientId</strong> : <em>( <code>String|Null</code> required )</em> An identifier used to disambiguate this client.</li>
+<li><strong>namespace</strong> : <em>( <code>String|Null</code> default=null )</em> Internally prefix the nsq topics. This will be handled transparent, but with this it's possible to separate different environments from each other. E.g. you can run a "staging" and "live" environment on one nsq cluster.</li>
 <li><strong>active</strong> : <em>( <code>Boolean</code> default=true )</em> Configuration to (en/dis)abel the nsq recorder</li>
 <li><strong>maxInFlight</strong> : <em>( <code>Number</code> default=1 )</em> The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.</li>
 <li><strong>heartbeatInterval</strong> : <em>( <code>Number</code> default=30 )</em> The frequency in seconds at which the nsqd will send heartbeats to this Reader.</li>
@@ -1080,6 +1083,7 @@ This is just an internal helper. The Method <code>list</code> will also wait for
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.5|2015-12-02|Added namespaces and made multiple parallel logger instances possible.|
 |0.0.4|2015-12-02|configuration bugfix|
 |0.0.3|2015-12-02|updated object tests|
 |0.0.2|2015-12-02|Internal restructure and docs|

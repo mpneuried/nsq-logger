@@ -63,10 +63,11 @@ writer.publish( "topic23", "Do some Stuff!" );
 
 - **clientId** : *( `String|Null` required )* An identifier used to disambiguate this client.
 - **active** : *( `Boolean` default=true )* Configuration to (en/dis)abel the nsq recorder
+- **namespace** : *( `String|Null` default=null )* Internally prefix the nsq topics. This will be handled transparent, but with this it's possible to separate different environments from each other. E.g. you can run a "staging" and "live" environment on one nsq cluster.
 - **loggerChannel** : *( `String` default="nsqlogger" )* The channel name for the logger to each topic
 - **exceededTopic** : *( `String` default="_exceeded" )* A topic name, that will store exceeded messages.
 - **ignoreTopics** : *( `String[]|Function` default=null )* A list of topics that should be ignored or a function that will called to check the ignored topics manually
-- **lookupdHTTPAddresses** : *( `Number` default=60 )* Time in seconds to poll the nsqlookupd servers to sync the availible topics
+- **lookupdHTTPAddresses** : *( `Number` default=60 )* Time in seconds to poll the nsqlookupd servers to sync the available topics
 - **maxInFlight** : *( `Number` default=1 )* The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.
 - **heartbeatInterval** : *( `Number` default=30 )* The frequency in seconds at which the nsqd will send heartbeats to this Reader.
 - **lookupdTCPAddresses** : *( `String[]` default=[ "127.0.0.1:4160", "127.0.0.1:4162" ] )* A list of nsq lookup servers
@@ -223,6 +224,7 @@ writer.publish( "topic23", "Do some Stuff!" );
 <a name="writer-config"></a>
 
 - **clientId** : *( `String|Null` required )* An identifier used to disambiguate this client.
+- **namespace** : *( `String|Null` default=null )* Internally prefix the nsq topics. This will be handled transparent, but with this it's possible to separate different environments from each other. E.g. you can run a "staging" and "live" environment on one nsq cluster.
 - **active** : *( `Boolean` default=true )* Configuration to (en/dis)abel the nsq recorder
 - **host** : *( `String` default="127.0.0.1" )* Host of a nsqd
 - **port** : *( `Number` default=4150 )* Port of a nsqd
@@ -406,6 +408,7 @@ reader.connect();
 <a name="reader-config"></a>
 
 - **clientId** : *( `String|Null` required )* An identifier used to disambiguate this client.
+- **namespace** : *( `String|Null` default=null )* Internally prefix the nsq topics. This will be handled transparent, but with this it's possible to separate different environments from each other. E.g. you can run a "staging" and "live" environment on one nsq cluster.
 - **active** : *( `Boolean` default=true )* Configuration to (en/dis)abel the nsq recorder
 - **maxInFlight** : *( `Number` default=1 )* The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.
 - **heartbeatInterval** : *( `Number` default=30 )* The frequency in seconds at which the nsqd will send heartbeats to this Reader.
@@ -526,6 +529,7 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.5|2015-12-02|Added namespaces and made multiple parallel logger instances possible.|
 |0.0.4|2015-12-02|configuration bugfix|
 |0.0.3|2015-12-02|updated object tests|
 |0.0.2|2015-12-02|Internal restructure and docs|

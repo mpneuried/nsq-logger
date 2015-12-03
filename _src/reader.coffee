@@ -33,20 +33,22 @@ class NsqReader extends require( "./basic" )
 
 			# **requeueDelay** *Number|Null* The delay is in seconds. This is how long nsqd will hold on the message before attempting it again.
 			requeueDelay: 5
+			# **namespace** *String* A namespace for the topics. This will be added/removed transparent to the topics. So only topics within this namespace a relevant.
+			namespace: null
 			
 	constructor: ( @logger, @topic, @channel, options )->
 		@connected = false
-
+		
 		super( options )
-
+		
 		@fetchClientId()
 		return
 
 	_initClient: =>
 		if @client
 			return @client
-		@log "debug", "start reader", [@topic, @channel]
-		@client = new nsq.Reader( @topic, @channel, @config )
+		@debug "start reader", @topic, @channel, @config.namespace
+		@client = new nsq.Reader( @nsAdd( @topic ), @channel, @config )
 
 		@client.on( nsq.Reader.NSQD_CLOSED, @onDisconnect )
 		@client.on( nsq.Reader.NSQD_CONNECTED, @onConnect )
@@ -58,18 +60,18 @@ class NsqReader extends require( "./basic" )
 		return @client
 
 	onError: ( err )=>
-		@log "error", "nsq-reader", err
+		@error "nsq-reader", err
 		return
 
 	onDiscard: ( msg )=>
-		@emit( "exceeded", @topic, msg.json() )
-		@log "warning", "message exceeded", @topic, msg.json()
+		@emit( "exceeded", msg.json() )
+		@warning "message exceeded", @topic, msg.json()
 		return
 
 	onMessage: ( msg )=>
 		@emit "message", msg.json(), ( err )=>
 			if err
-				@log "error", "message processing", err
+				@error "message processing", err
 				msg.requeue( @config.requeueDelay )
 				return
 			msg.finish()

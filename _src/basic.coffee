@@ -121,7 +121,6 @@ class NsqBasic extends require( "mpbasic" )()
 	
 
 	destroy: ( cb )=>
-
 		if @connected
 			@disconnect()
 			@on "disconnected", ->
@@ -131,7 +130,27 @@ class NsqBasic extends require( "mpbasic" )()
 			return
 		cb()
 		return
-
+		
+	nsTest: ( topic )=>
+		if not @config.namespace?
+			return true
+		return topic[...@config.namespace.length] is @config.namespace
+		
+	nsRem: ( topic )=>
+		if not @config.namespace?
+			return topic
+		if not @nsTest( topic )
+			return topic
+		return topic[@config.namespace.length..]
+			
+	nsAdd: ( topic )=>
+		if not @config.namespace?
+			return topic
+		if @nsTest( topic )
+			return topic
+		return @config.namespace + topic
+			
+		
 	ERRORS: =>
 		return @extend {}, super,
 			# Exceptions

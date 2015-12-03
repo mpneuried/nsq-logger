@@ -12,7 +12,7 @@ Topics = require 'nsq-topics'
 Writer = require "./writer"
 Reader = require "./reader"
 
-READERS = {}
+
 
 class NsqLogger extends require( "./basic" )
 	# ## defaults
@@ -24,8 +24,13 @@ class NsqLogger extends require( "./basic" )
 			exceededTopic: "_exceeded"
 			# **ignoreTopics** *String[]|Function* A list of topics that should be ignored or a function that will called to check the ignored topics manually
 			ignoreTopics: null
+			# **namespace** *String* A namespace for the topics. This will be added/removed transparent to the topics. So only topics within this namespace a relevant.
+			namespace: null
 
 	constructor: ( options )->
+		
+		@READERS = {}
+		
 		# set flags
 		@ready = false
 
@@ -50,16 +55,21 @@ class NsqLogger extends require( "./basic" )
 		if @ready
 			return
 
-		# add a topic filter to only connect to topics that do not start with a "_"
 		@Topics.filter ( testT )=>
-			if testT is @config.exceededTopic
+			if not @nsTest( testT )
 				return false
-			if not @config.ignoreTopics?
-				return true
-			if _.isArray( @config.ignoreTopics ) and testT in @config.ignoreTopics
+				
+			_tp = @nsRem( testT )
+			
+			if _tp is @config.exceededTopic
 				return false
-			if _.isFunction( @config.ignoreTopics )
-				return @config.ignoreTopics( testT )
+			
+			if @config.ignoreTopics?
+				if _.isArray( @config.ignoreTopics ) and _tp in @config.ignoreTopics
+					return false
+				if _.isFunction( @config.ignoreTopics )
+					return @config.ignoreTopics( _tp )
+					
 			return true
 
 		@Topics.list ( err, topics )=>
@@ -68,7 +78,6 @@ class NsqLogger extends require( "./basic" )
 				# on initial read error retry to read the topic after 60 sec
 				setTimeout( @read, 60 * 1000 )
 				return
-
 			# create initail readers
 			for _tp in topics
 				@addReader( _tp )
@@ -87,12 +96,14 @@ class NsqLogger extends require( "./basic" )
 		if not @ready
 			return
 		
-		_count = Object.keys( READERS ).length
+		_count = Object.keys( @READERS ).length
+		
+		@Topics.deactivate()
 		
 		@Writer.destroy =>
 			@warning "destroy #{_count} readers"
-			for _name, _reader of READERS
-				READERS[ _name ].destroy =>
+			for _name, _reader of @READERS
+				@READERS[ _name ].destroy =>
 					_count--
 					if _count <= 0
 						@removeAllListeners()
@@ -103,45 +114,47 @@ class NsqLogger extends require( "./basic" )
 		return
 
 	addReader: ( topic )=>
-		if READERS[ topic ]?
+		topic = @nsRem( topic )
+		if @READERS[ topic ]?
 			@_handleError( "addReader", "EREADEREXISTS", { topic: topic } )
 			return
-		READERS[ topic ] = new Reader( @, topic, @config.loggerChannel, @config )
-		READERS[ topic ].on "message", ( data, cb )=>
-			@message( topic, data, cb )
+		@READERS[ topic ] = new Reader( @, topic, @config.loggerChannel, @config )
+		@READERS[ topic ].on "message", ( data, cb )=>
+			@emit( "message", topic, data, cb )
 			return
 
-		READERS[ topic ].on "exceeded", @exceeded
+		@READERS[ topic ].on "exceeded", ( data, cb )=>
+			@exceeded( topic, data, cb )
+			return
 
-		READERS[ topic ].connect()
+		@READERS[ topic ].connect()
 
 		@log "info", "reader ´#{topic}´ added"
 		return
 
 	removeReader: ( topic )=>
-		if not READERS[ topic ]?
+		topic = @nsRem( topic )
+		if not @READERS[ topic ]?
 			@_handleError( "removeReader", "EREADERNOTFOUND", { topic: topic } )
 			return
 
-		READERS[ topic ].destroy ( err )=>
+		@READERS[ topic ].destroy ( err )=>
 			if err
 				@log "error", "destroy reader", err
 				return
-			READERS[ topic ].removeAllListeners()
-			delete READERS[ topic ]
-			@log "info", "reader ´#{topic}´ destroyed", Object.keys( READERS )
+			@READERS[ topic ].removeAllListeners()
+			delete @READERS[ topic ]
+			@log "info", "reader ´#{topic}´ destroyed", Object.keys( @READERS )
 			return
-		return
-
-	message: ( topic, data, cb )=>
-		@emit( "message", topic, data, cb )
 		return
 
 	exceeded: ( topic, data )=>
 		_data =
 			topic: topic
 			payload: data
-
+		
+		@emit( "exceeded", @nsRem( topic ), data )
+		
 		@Writer.connect()
 		@Writer.publish @config.exceededTopic, _data , ( err )=>
 			if err
@@ -152,7 +165,7 @@ class NsqLogger extends require( "./basic" )
 	ERRORS: =>
 		return @extend {}, super,
 			# Exceptions
-			"EREADEREXISTS": [ 409, "A reader for the topic `{{topic}}` allready exists" ]
-			"EREADERNOTFOUND": [ 404, "The reader for the topic `{{topic}}` was not found" ]
+			"EREADEREXISTS": [ 409, "A reader for the topic `<%=topic%>` allready exists" ]
+			"EREADERNOTFOUND": [ 404, "The reader for the topic `<%=topic%>` was not found" ]
 
 module.exports = NsqLogger

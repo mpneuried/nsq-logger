@@ -12,6 +12,7 @@ CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1
 	logging: {}
+	lookupdHTTPAddresses: [ "localhost:4161", "localhost:4163" ]
 	namespace: null
 
 

@@ -529,8 +529,9 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.5|2015-12-02|Added namespaces and made multiple parallel logger instances possible.|
-|0.0.4|2015-12-02|configuration bugfix|
+|0.0.6|2015-12-04|Bugfix on setting an array configuration; added code banner|
+|0.0.5|2015-12-03|Added namespaces and made multiple parallel logger instances possible.|
+|0.0.4|2015-12-03|configuration bugfix|
 |0.0.3|2015-12-02|updated object tests|
 |0.0.2|2015-12-02|Internal restructure and docs|
 |0.0.1|2015-12-02|Initial version|

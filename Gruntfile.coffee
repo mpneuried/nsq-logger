@@ -23,7 +23,22 @@ module.exports = (grunt) ->
 				src: ["**/*.coffee"]
 				dest: ''
 				ext: '.js'
-
+		
+		usebanner:
+			options:
+				position: "top"
+				banner: """
+/*
+ * nsq-logger <%= pkg.version %> ( <%= grunt.template.today( 'yyyy-mm-dd' )%> )
+ * http://mpneuried.github.io/nsq-logger/
+ *
+ * Released under the MIT license
+ * https://github.com/mpneuried/nsq-logger/blob/master/LICENSE
+*/
+"""			
+			js:
+				files:
+					src: [ "*.js", "test/*.js" ]
 		clean:
 			base:
 				src: [ "lib", "test" ]
@@ -35,7 +50,7 @@ module.exports = (grunt) ->
 			pckg:
 				options:
 					globals:
-						version: "0.0.11"
+						version: "<%=pkg.version%>"
 
 					prefix: "@@"
 					suffix: ''
@@ -84,6 +99,7 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks "grunt-mocha-cli"
 	grunt.loadNpmTasks "grunt-include-replace"
 	grunt.loadNpmTasks "grunt-docker"
+	grunt.loadNpmTasks "grunt-banner"
 
 	# just a hack until this issue has been fixed: https://github.com/yeoman/grunt-regarde/issues/3
 	grunt.option('force', not grunt.option('force'))
@@ -96,5 +112,5 @@ module.exports = (grunt) ->
 	grunt.registerTask "test", [ "mochacli:main", "clean:nsq" ]
 
 	# build the project
-	grunt.registerTask "build", [ "clear", "coffee:base", "includereplace" ]
+	grunt.registerTask "build", [ "clear", "coffee:base", "includereplace", "usebanner:js" ]
 	grunt.registerTask "build-dev", [ "clear", "coffee:base", "docs", "test" ]

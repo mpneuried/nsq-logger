@@ -88,7 +88,7 @@ class Config
 			for _k, _v of key
 				@set( _k, _v )
 			return
-		if _.isObject( @[ key ] ) and _.isObject( value )
+		if _.isObject( @[ key ] ) and _.isObject( value ) and not _.isArray( value )
 			@[ key ] = extend( true, {}, @[ key ], value )
 		else
 			@[ key ] = value

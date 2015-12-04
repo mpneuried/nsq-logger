@@ -1,6 +1,6 @@
 {
   "name": "nsq-logger",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A nsq reader factory to handle readers multiple topics based on the `nsq-topics` module",
   "keywords": [],
   "homepage": "https://github.com/mpneuried/nsq-logger",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "async": "^1.5.0",
     "grunt": "0.4.x",
+    "grunt-banner": "^0.6.0",
     "grunt-contrib-clean": "*",
     "grunt-contrib-coffee": "*",
     "grunt-docker": "0.0.x",

@@ -35,7 +35,9 @@ class NsqLogger extends require( "./basic" )
 		@ready = false
 
 		super( options )
-
+		
+		@debug "config", @config
+				
 		_writerInst = null
 		@getter "Writer", =>
 			if not _writerInst?

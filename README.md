@@ -5,7 +5,7 @@ nsq-logger
 [![Build Status](https://david-dm.org/mpneuried/nsq-logger.png)](https://david-dm.org/mpneuried/nsq-logger)
 [![NPM version](https://badge.fury.io/js/nsq-logger.png)](http://badge.fury.io/js/nsq-logger)
 
-Nsq helper to poll a nsqlookupd service for all it's logger and mirror it locally.
+Nsq service to read messages from all topics listed within a list of nsqlookupd services.|
 
 [![NPM](https://nodei.co/npm/nsq-logger.png?downloads=true&stars=true)](https://nodei.co/npm/nsq-logger/)
 

@@ -265,18 +265,19 @@
 <a class="line-num" href="#line-70" id="line-70">70</a>      <span class="k">return</span>
 <a class="line-num" href="#line-71" id="line-71">71</a>  
 <a class="line-num" href="#line-72" id="line-72">72</a>    <span class="nv">onMessage: </span><span class="nf">( msg )=&gt;</span>
-<a class="line-num" href="#line-73" id="line-73">73</a>      <span class="nx">@emit</span> <span class="s">&quot;message&quot;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="nf">( err )=&gt;</span>
+<a class="line-num" href="#line-73" id="line-73">73</a>      <span class="nx">@emit</span><span class="p">(</span> <span class="s">&quot;message&quot;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">json</span><span class="p">(),</span> <span class="nf">( err )=&gt;</span>
 <a class="line-num" href="#line-74" id="line-74">74</a>        <span class="k">if</span> <span class="nx">err</span>
 <a class="line-num" href="#line-75" id="line-75">75</a>          <span class="nx">@error</span> <span class="s">&quot;message processing&quot;</span><span class="p">,</span> <span class="nx">err</span>
 <a class="line-num" href="#line-76" id="line-76">76</a>          <span class="nx">msg</span><span class="p">.</span><span class="nx">requeue</span><span class="p">(</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">requeueDelay</span> <span class="p">)</span>
 <a class="line-num" href="#line-77" id="line-77">77</a>          <span class="k">return</span>
 <a class="line-num" href="#line-78" id="line-78">78</a>        <span class="nx">msg</span><span class="p">.</span><span class="nx">finish</span><span class="p">()</span>
 <a class="line-num" href="#line-79" id="line-79">79</a>        <span class="k">return</span>
-<a class="line-num" href="#line-80" id="line-80">80</a>      <span class="k">return</span>
-<a class="line-num" href="#line-81" id="line-81">81</a>  
+<a class="line-num" href="#line-80" id="line-80">80</a>      <span class="p">,</span> <span class="nx">msg</span> <span class="p">)</span>
+<a class="line-num" href="#line-81" id="line-81">81</a>      <span class="k">return</span>
 <a class="line-num" href="#line-82" id="line-82">82</a>  
-<a class="line-num" href="#line-83" id="line-83">83</a>  <span class="nv">module.exports = </span><span class="nx">NsqReader</span>
-<a class="line-num" href="#line-84" id="line-84">84</a>  </pre></div>
+<a class="line-num" href="#line-83" id="line-83">83</a>  
+<a class="line-num" href="#line-84" id="line-84">84</a>  <span class="nv">module.exports = </span><span class="nx">NsqReader</span>
+<a class="line-num" href="#line-85" id="line-85">85</a>  </pre></div>
         </td>
       </tr>
   </tbody>

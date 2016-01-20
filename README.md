@@ -67,7 +67,7 @@ writer.publish( "topic23", "Do some Stuff!" );
 - **loggerChannel** : *( `String` default="nsqlogger" )* The channel name for the logger to each topic
 - **exceededTopic** : *( `String` default="_exceeded" )* A topic name, that will store exceeded messages.
 - **ignoreTopics** : *( `String[]|Function` default=null )* A list of topics that should be ignored or a function that will called to check the ignored topics manually
-- **lookupdHTTPAddresses** : *( `Number` default=60 )* Time in seconds to poll the nsqlookupd servers to sync the available topics
+- **lookupdPollInterval** : *( `Number` default=60 )* Time in seconds to poll the nsqlookupd servers to sync the available topics
 - **maxInFlight** : *( `Number` default=1 )* The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.
 - **heartbeatInterval** : *( `Number` default=30 )* The frequency in seconds at which the nsqd will send heartbeats to this Reader.
 - **lookupdTCPAddresses** : *( `String[]` default=[ "127.0.0.1:4160", "127.0.0.1:4162" ] )* A list of nsq lookup servers
@@ -319,6 +319,7 @@ The main event to catch and process messages from all topics.
 - **topic** : *( `String` )* The topic of this message
 - **data** : *( `String|Object|Array` )* The message content. A String or parsed JSON data.
 - **done** : *( `String` )* You have to call this function until the message was processed. This will remove the message from the queue. Otherwise it will be requeued. If you add a argument `cb( new Error("Dooh!") )` it will interpreted as an error and this message be requeued immediately 
+- **msg** : *( `Message` )* The raw [nsqjs message](https://github.com/mpneuried/nsqjs/#message).
 
 **Example:**
 
@@ -529,6 +530,7 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.0.7|2016-01-20|Added raw nsqjs Message as last argument to the `message` event |
 |0.0.6|2015-12-04|Bugfix on setting an array configuration; added code banner|
 |0.0.5|2015-12-03|Added namespaces and made multiple parallel logger instances possible.|
 |0.0.4|2015-12-03|configuration bugfix|

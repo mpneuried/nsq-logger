@@ -166,6 +166,9 @@
         <a href="#release%20history">Release History</a>
       </div>
       <div class="heading h2">
+        <a href="#other%20projects">Other projects</a>
+      </div>
+      <div class="heading h2">
         <a href="#the%20mit%20license%20(mit)">The MIT License (MIT)</a>
       </div>
     </div>
@@ -184,7 +187,7 @@
 <a href="https://david-dm.org/mpneuried/nsq-logger"><img src="https://david-dm.org/mpneuried/nsq-logger.png" alt="Build Status" title="" /></a>
 <a href="http://badge.fury.io/js/nsq-logger"><img src="https://badge.fury.io/js/nsq-logger.png" alt="NPM version" title="" /></a></p>
 
-<p>Nsq helper to poll a nsqlookupd service for all it's logger and mirror it locally.</p>
+<p>Nsq service to read messages from all topics listed within a list of nsqlookupd services.|</p>
 
 <p><a href="https://nodei.co/npm/nsq-logger/"><img src="https://nodei.co/npm/nsq-logger.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
 
@@ -262,7 +265,7 @@
 <li><strong>loggerChannel</strong> : <em>( <code>String</code> default="nsqlogger" )</em> The channel name for the logger to each topic</li>
 <li><strong>exceededTopic</strong> : <em>( <code>String</code> default="_exceeded" )</em> A topic name, that will store exceeded messages.</li>
 <li><strong>ignoreTopics</strong> : <em>( <code>String[]|Function</code> default=null )</em> A list of topics that should be ignored or a function that will called to check the ignored topics manually</li>
-<li><strong>lookupdHTTPAddresses</strong> : <em>( <code>Number</code> default=60 )</em> Time in seconds to poll the nsqlookupd servers to sync the available topics</li>
+<li><strong>lookupdPollInterval</strong> : <em>( <code>Number</code> default=60 )</em> Time in seconds to poll the nsqlookupd servers to sync the available topics</li>
 <li><strong>maxInFlight</strong> : <em>( <code>Number</code> default=1 )</em> The maximum number of messages to process at once. This value is shared between nsqd connections. It's highly recommended that this value is greater than the number of nsqd connections.</li>
 <li><strong>heartbeatInterval</strong> : <em>( <code>Number</code> default=30 )</em> The frequency in seconds at which the nsqd will send heartbeats to this Reader.</li>
 <li><strong>lookupdTCPAddresses</strong> : <em>( <code>String[]</code> default=[ "127.0.0.1:4160", "127.0.0.1:4162" ] )</em> A list of nsq lookup servers</li>
@@ -706,6 +709,7 @@ You can grab the internal used insatnce with <code>logger.Topics</code></p>
 <li><strong>topic</strong> : <em>( <code>String</code> )</em> The topic of this message</li>
 <li><strong>data</strong> : <em>( <code>String|Object|Array</code> )</em> The message content. A String or parsed JSON data.</li>
 <li><strong>done</strong> : <em>( <code>String</code> )</em> You have to call this function until the message was processed. This will remove the message from the queue. Otherwise it will be requeued. If you add a argument <code>cb( new Error("Dooh!") )</code> it will interpreted as an error and this message be requeued immediately </li>
+<li><strong>msg</strong> : <em>( <code>Message</code> )</em> The raw <a href="https://github.com/mpneuried/nsqjs/#message">nsqjs message</a>.</li>
 </ul>
 
 <p><strong>Example:</strong></p>
@@ -1083,8 +1087,10 @@ This is just an internal helper. The Method <code>list</code> will also wait for
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.5|2015-12-02|Added namespaces and made multiple parallel logger instances possible.|
-|0.0.4|2015-12-02|configuration bugfix|
+|0.0.7|2016-01-20|Added raw nsqjs Message as last argument to the <code>message</code> event |
+|0.0.6|2015-12-04|Bugfix on setting an array configuration; added code banner|
+|0.0.5|2015-12-03|Added namespaces and made multiple parallel logger instances possible.|
+|0.0.4|2015-12-03|configuration bugfix|
 |0.0.3|2015-12-02|updated object tests|
 |0.0.2|2015-12-02|Internal restructure and docs|
 |0.0.1|2015-12-02|Initial version|</p>
@@ -1094,6 +1100,37 @@ This is just an internal helper. The Method <code>list</code> will also wait for
 <blockquote>
   <p>Initially Generated with <a href="https://github.com/mpneuried/generator-mpnodemodule">generator-mpnodemodule</a></p>
 </blockquote>
+
+
+<div class="pilwrap" id="other%20projects">
+  <h2>
+    <a href="#other%20projects" name="other%20projects" class="pilcrow">&#182;</a>
+    Other projects
+  </h2>
+</div>
+
+
+<p>|Name|Description|
+|:--|:--|
+|<a href="https://github.com/mpneuried/nsq-topics"><strong>nsq-topics</strong></a>|Nsq helper to poll a nsqlookupd service for all it's topics and mirror it locally.|
+|<a href="https://github.com/mpneuried/nsq-nodes"><strong>nsq-nodes</strong></a>|Nsq helper to poll a nsqlookupd service for all it's nodes and mirror it locally.|
+|<a href="https://github.com/tcs-de/nodecache"><strong>node-cache</strong></a>|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
+|<a href="https://github.com/mpneuried/nsq-watch"><strong>nsq-watch</strong></a>|Watch one or many topics for unprocessed messages.|
+|<a href="https://github.com/smrchy/rsmq"><strong>rsmq</strong></a>|A really simple message queue based on redis|
+|<a href="https://github.com/mpneuried/redis-heartbeat"><strong>redis-heartbeat</strong></a>|Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.|
+|<a href="https://github.com/mpneuried/systemhealth"><strong>systemhealth</strong></a>|Node module to run simple custom checks for your machine or it's connections. It will use <a href="https://github.com/mpneuried/redis-heartbeat">redis-heartbeat</a> to send the current state to redis.|
+|<a href="https://github.com/mpneuried/rsmq-cli"><strong>rsmq-cli</strong></a>|a terminal client for rsmq|
+|<a href="https://github.com/smrchy/rest-rsmq"><strong>rest-rsmq</strong></a>|REST interface for.|
+|<a href="https://github.com/smrchy/redis-sessions"><strong>redis-sessions</strong></a>|An advanced session store for NodeJS and Redis|
+|<a href="https://github.com/mpneuried/connect-redis-sessions"><strong>connect-redis-sessions</strong></a>|A connect or express middleware to simply use the <a href="https://github.com/smrchy/redis-sessions">redis sessions</a>. With <a href="https://github.com/smrchy/redis-sessions">redis sessions</a> you can handle multiple sessions per user_id.|
+|<a href="https://github.com/mpneuried/redis-notifications"><strong>redis-notifications</strong></a>|A redis based notification engine. It implements the rsmq-worker to safely create notifications and recurring reports.|
+|<a href="https://github.com/mpneuried/hyperrequest"><strong>hyperrequest</strong></a>|A wrapper around <a href="https://github.com/substack/hyperquest">hyperquest</a> to handle the results|
+|<a href="https://github.com/smrchy/task-queue-worker"><strong>task-queue-worker</strong></a>|A powerful tool for background processing of tasks that are run by making standard http requests
+|<a href="https://github.com/mpneuried/soyer"><strong>soyer</strong></a>|Soyer is small lib for server side use of Google Closure Templates with node.js.|
+|<a href="https://github.com/mpneuried/grunt-soy-compile"><strong>grunt-soy-compile</strong></a>|Compile Goggle Closure Templates ( SOY ) templates including the handling of XLIFF language files.|
+|<a href="https://github.com/mpneuried/backlunr"><strong>backlunr</strong></a>|A solution to bring Backbone Collections together with the browser fulltext search engine Lunr.js|
+|<a href="https://github.com/mpneuried/domel"><strong>domel</strong></a>|A simple dom helper if you want to get rid of jQuery|
+|<a href="https://github.com/mpneuried/obj-schema"><strong>obj-schema</strong></a>|Simple module to validate an object by a predefined schema|</p>
 
 
 <div class="pilwrap" id="the%20mit%20license%20(mit)">

@@ -121,8 +121,8 @@ class NsqLogger extends require( "./basic" )
 			@_handleError( "addReader", "EREADEREXISTS", { topic: topic } )
 			return
 		@READERS[ topic ] = new Reader( @, topic, @config.loggerChannel, @config )
-		@READERS[ topic ].on "message", ( data, cb )=>
-			@emit( "message", topic, data, cb )
+		@READERS[ topic ].on "message", ( data, cb, msg )=>
+			@emit( "message", topic, data, cb, msg )
 			return
 
 		@READERS[ topic ].on "exceeded", ( data, cb )=>

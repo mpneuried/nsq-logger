@@ -69,13 +69,14 @@ class NsqReader extends require( "./basic" )
 		return
 
 	onMessage: ( msg )=>
-		@emit "message", msg.json(), ( err )=>
+		@emit( "message", msg.json(), ( err )=>
 			if err
 				@error "message processing", err
 				msg.requeue( @config.requeueDelay )
 				return
 			msg.finish()
 			return
+		, msg )
 		return
 
 

@@ -65,13 +65,17 @@ describe "----- nsq-logger TESTS -----", ->
 					_topic = testData.newTopic()
 					_data = utils.randomString( 1024 )
 					
-					logger.on "message", ( topic, data, cb )->
+					logger.on "message", ( topic, data, cb, msg )->
 						cb()
+						
 						# wait for the previously generated topic
 						if topic is _topic
+							msg.attempts.should.be.Number().equal( 1 )
+							
 							topic.should.equal( _topic )
 							data.should.equal( _data )
 							
+							logger.removeAllListeners( "message" )
 							done()
 						return
 					writer.publish( _topic, _data )

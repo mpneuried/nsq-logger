@@ -159,15 +159,47 @@ describe "----- nsq-logger TESTS -----", ->
 	
 	describe "Active Tests", ->
 		
-		it "wait for errors", ( done )->
+		logger2 = null
+		
+		it "wait for errors of deactivated logger", ( done )->
 			@timeout(4000)
-			logger = new NsqLogger( extend( {}, CNF, { active: false} ) )
+			logger2 = new NsqLogger( extend( {}, CNF, { active: false} ) )
 			
-			logger.on "error", ( err )->
+			logger2.on "error", ( err )->
 				throw err
 				return
 				
 			setTimeout( done, 3000 )
 			return
+		
+		it "activate logger", ( done )->
+			
+			@timeout( 10000 )
+			_topic = "nsq_logger_test_activate_test"
+			_data = randoms.obj.string( 13, 666 )
+			
+			logger2.on "message", ( topic, data, cb, msg )->
+				cb()
+				# wait for the previously generated topic
+				if topic is _topic
+					msg.attempts.should.be.Number().equal( 1 )
+					
+					topic.should.equal( _topic )
+					data.should.eql( _data )
+					
+					logger.removeAllListeners( "message" )
+					done()
+				return
+				
+			logger2.on "ready", ->
+				logger2.Writer.publish( _topic, _data )
+				return
+				
+			logger2.activate()
+			
+			return
+		
+		return
+		
 			
 	return

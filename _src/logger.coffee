@@ -50,14 +50,16 @@ class NsqLogger extends require( "./basic" )
 			if not _topicsInst?
 				_topicsInst = new Topics( @config )
 			return _topicsInst
-
+			
 		@_start()
 		return
 
 	_start: =>
 		if @ready
 			return
-
+		if not @active()
+			return
+			
 		@Topics.filter ( testT )=>
 			if not @nsTest( testT )
 				return false
@@ -90,7 +92,31 @@ class NsqLogger extends require( "./basic" )
 			@Topics.on "remove", @removeReader
 
 			@ready = true
+			@connected = true
 			@emit( "ready" )
+			return
+		
+		
+		return
+	
+	connect: =>
+		if not @config.active
+			return
+		
+		@Writer.connect()
+		@Topics.activate()
+		
+		@_start()
+		return @
+	
+	disconnect: =>		
+		@connected = false
+		@ready = false
+		@Topics.deactivate()
+		@Topics.removeListener( "add", @addReader )
+		@Topics.removeListener( "remove", @addReader )
+		@_destroyReaders =>
+			@emit( "disconnected" )
 			return
 		return
 		
@@ -99,19 +125,10 @@ class NsqLogger extends require( "./basic" )
 		if not @ready
 			return
 		
-		_count = Object.keys( @READERS ).length
-		
-		@Topics.deactivate()
+		@disconnect()
 		
 		@Writer.destroy =>
-			@warning "destroy #{_count} readers"
-			for _name, _reader of @READERS
-				@READERS[ _name ].destroy =>
-					_count--
-					if _count <= 0
-						@removeAllListeners()
-						cb()
-					return
+			@_destroyReaders( cb )
 			return
 			
 		return
@@ -164,6 +181,20 @@ class NsqLogger extends require( "./basic" )
 				@log "error", "write messag to exceeded list", err
 			return
 		return
+	
+	_destroyReaders: ( cb )=>
+		@warning "destroy #{_count} readers"
+		_count = Object.keys( @READERS ).length
+		
+		for _name, _reader of @READERS
+			@READERS[ _name ].destroy =>
+				_count--
+				if _count <= 0
+					@removeAllListeners()
+					cb()
+				return
+		return
+		
 
 	ERRORS: =>
 		return @extend {}, super,

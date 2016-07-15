@@ -12,13 +12,20 @@ node_js:
   - 0.10
   - 0.12
   - 4.0
-  - 4.1
-  - 4.2
+  - 4.4
   - 5.0
-  - 5.1
+  - 5.5
+  - 5.11
+  - 6.0
+  - 6.1
   - iojs
+  - node
 before_install:
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
 before_script:
   - "npm install -g mocha grunt-cli"
   - "grunt build"
+matrix:
+  fast_finish: true
+  allow_failures:
+    - node_js: "5.0"

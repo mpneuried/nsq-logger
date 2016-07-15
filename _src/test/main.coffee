@@ -1,20 +1,26 @@
 should = require('should')
-_ = require('lodash')
+extend = require( "extend" )
+_compact = require( "lodash/compact" )
+_isEmpty = require( "lodash/isEmpty" )
 
 config = require( "../config" )
 
-utils = require( "./utils" )
+randoms = require( "randoms" )
 
 testServers = require( "./nsq-deamons" )
 NsqLogger = require( "../." )
+
+[ nsqdHost, nsqdPort ] = testServers.nsqdAddress( "tcp" )?.split( ":" )
 
 CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1
 	logging: {}
-	lookupdHTTPAddresses: [ "localhost:4161", "localhost:4163" ]
+	host: nsqdHost
+	port: parseInt( nsqdPort, 10 )
+	lookupdHTTPAddresses: testServers.lookupdAddresses( "http" )
+	lookupdTCPAddresses: testServers.lookupdAddresses( "tcp" )
 	namespace: null
-
 
 logger = null
 writer = null
@@ -27,6 +33,7 @@ namespaces = [ null, "mochatestA_", "mochatestB_" ]
 describe "----- nsq-logger TESTS -----", ->
 	
 	before ( done )->
+		@timeout( 10000 )
 		testServers.start ->
 			done()
 			return
@@ -43,7 +50,7 @@ describe "----- nsq-logger TESTS -----", ->
 		describe "Namespace `#{namespace}` Tests", ->
 			
 			before ( done )->
-				logger = new NsqLogger( _.extend( {}, CNF, {namespace: namespace} ) )
+				logger = new NsqLogger( extend( {}, CNF, {namespace: namespace} ) )
 
 				writer = logger.Writer
 				config = logger.config
@@ -53,7 +60,7 @@ describe "----- nsq-logger TESTS -----", ->
 
 			after ( done )->
 				@timeout( 10000 )
-				testData.cleanup config.lookupdHTTPAddresses, ->
+				testData.cleanup testServers.lookupdAddresses( "http" ), ->
 					logger.destroy ->
 						done()
 						return
@@ -63,7 +70,7 @@ describe "----- nsq-logger TESTS -----", ->
 				it "wait for a single message", ( done )->
 					@timeout( 10000 )
 					_topic = testData.newTopic()
-					_data = utils.randomString( 1024 )
+					_data = randoms.obj.string( 13, 666 )
 					
 					logger.on "message", ( topic, data, cb, msg )->
 						cb()
@@ -73,7 +80,7 @@ describe "----- nsq-logger TESTS -----", ->
 							msg.attempts.should.be.Number().equal( 1 )
 							
 							topic.should.equal( _topic )
-							data.should.equal( _data )
+							data.should.eql( _data )
 							
 							logger.removeAllListeners( "message" )
 							done()
@@ -82,7 +89,7 @@ describe "----- nsq-logger TESTS -----", ->
 					return
 					
 				it "test many messages within multiple topics", ( done )->
-					@timeout( 6000 )
+					@timeout( 15000 )
 					
 					logger.removeAllListeners( "message" )
 					
@@ -91,26 +98,26 @@ describe "----- nsq-logger TESTS -----", ->
 						_topic = testData.newTopic()
 						_topics[ _topic ] = []
 						for idx in [1..20]
-							_topics[ _topic ].push utils.randomString( utils.randRange( 1, 20 ) * 1024 )
+							_topics[ _topic ].push JSON.stringify( randoms.obj.string( 3, 42 ) )
 				
 					logger.on "message", ( topic, data, cb )->
 						cb()
 						# wait for the previously generated topic
 						if _topics[topic]?
-							_idx = _topics[topic].indexOf( data )
+							_idx = _topics[topic].indexOf( JSON.stringify( data ) )
 							_topics[topic][ _idx ] = null
 							
-							if not _.compact( _topics[topic] ).length
+							if not _compact( _topics[topic] ).length
 								delete _topics[topic]
-								
-							if not _topics? or _.isEmpty( _topics )
+							
+							if not _topics? or _isEmpty( _topics )
 								logger.removeAllListeners( "message" )
 								done()
 						return
 					
 					for tpc, datas of _topics
 						for data in datas
-							writer.publish( tpc, data )
+							writer.publish( tpc, JSON.parse( data ) )
 					return
 					
 				it "test many json messages within multiple topics", ( done )->
@@ -123,7 +130,7 @@ describe "----- nsq-logger TESTS -----", ->
 						_topic = testData.newTopic()
 						_topics[ _topic ] = []
 						for idx in [1..5]
-							_topics[ _topic ].push JSON.stringify( utils.randomobj( { maxObjSize: 5, maxDepth: 1, maxComplex: 1, maxStringLength: 50 } ) )
+							_topics[ _topic ].push JSON.stringify( randoms.obj.string.lower( 13, 666 ) )
 				
 					logger.on "message", ( topic, data, cb )->
 						cb()
@@ -133,10 +140,10 @@ describe "----- nsq-logger TESTS -----", ->
 							_idx = _topics[topic].indexOf( JSON.stringify( data ) )
 							_topics[topic][ _idx ] = null
 							
-							if not _.compact( _topics[topic] ).length
+							if not _compact( _topics[topic] ).length
 								delete _topics[topic]
 								
-							if not _topics? or _.isEmpty( _topics )
+							if not _topics? or _isEmpty( _topics )
 								logger.removeAllListeners( "message" )
 								done()
 						return

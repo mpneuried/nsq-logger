@@ -1,7 +1,7 @@
 async = require('async')
 hyperrequest = require('hyperrequest')
 
-utils = require('./utils')
+randoms = require('randoms')
 
 
 module.exports = ( namespace )->
@@ -35,7 +35,7 @@ module.exports = ( namespace )->
 		return
 	return {
 		newTopic: ->
-			_t = utils.randomString( 5 )
+			_t = "nsq_logger_test_" + randoms.string( 5 )
 			generatedTopics.push( _t )
 			return _t
 			

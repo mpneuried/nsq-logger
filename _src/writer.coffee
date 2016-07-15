@@ -5,7 +5,7 @@
 
 # **npm modules**
 nsq = require 'nsqjs'
-_ = require 'lodash'
+_isString = require ( "lodash/isString" )
 
 # **internal modules**
 
@@ -44,8 +44,8 @@ class NsqWriter extends require( "./basic" )
 	_initClient: =>
 		if @client?
 			return @client
-
-		@client = new nsq.Writer( @config.host, @config.port )
+		
+		@client = new nsq.Writer( "127.0.0.1", @config.port, @config )
 
 		@client.on( nsq.Writer.READY, @onConnect )
 		@client.on( nsq.Writer.CLOSED, @onDisconnect )
@@ -63,7 +63,7 @@ class NsqWriter extends require( "./basic" )
 			return
 
 		@debug "publish", topic, @nsAdd( topic )
-		if _.isString()
+		if _isString( data )
 			_data = data
 		else
 			_data = JSON.stringify(data)

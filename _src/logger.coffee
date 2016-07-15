@@ -4,7 +4,8 @@
 # A reader factory to spin up on reader per topic
 
 # **npm modules**
-_ = require( "lodash" )
+_isArray = require( "lodash/isArray" )
+_isFunction = require( "lodash/isFunction" )
 
 # **internal modules**
 Config = require "./config"
@@ -67,9 +68,9 @@ class NsqLogger extends require( "./basic" )
 				return false
 			
 			if @config.ignoreTopics?
-				if _.isArray( @config.ignoreTopics ) and _tp in @config.ignoreTopics
+				if _isArray( @config.ignoreTopics ) and _tp in @config.ignoreTopics
 					return false
-				if _.isFunction( @config.ignoreTopics )
+				if _isFunction( @config.ignoreTopics )
 					return @config.ignoreTopics( _tp )
 					
 			return true

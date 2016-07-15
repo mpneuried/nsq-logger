@@ -3,7 +3,9 @@
 # a collection of shared nsq methods
 
 # **npm modules**
-_ = require( "lodash" )
+_isFunction = require( "lodash/isFunction" )
+_isObject = require( "lodash/isObject" )
+_isArray = require( "lodash/isArray" )
 extend = require( "extend" )
 
 # **internal modules**
@@ -65,7 +67,7 @@ addGetter = ( prop, _get, context )=>
 		enumerable: true
 		writable: true
 
-	if _.isFunction( _get )
+	if _isFunction( _get )
 		_obj.get = _get
 	else
 		_obj.value = _get
@@ -84,11 +86,11 @@ class Config
 	set: ( key, value )=>
 		if not key?
 			return
-		if _.isObject( key )
+		if _isObject( key )
 			for _k, _v of key
 				@set( _k, _v )
 			return
-		if _.isObject( @[ key ] ) and _.isObject( value ) and not _.isArray( value )
+		if _isObject( @[ key ] ) and _isObject( value ) and not _isArray( value )
 			@[ key ] = extend( true, {}, @[ key ], value )
 		else
 			@[ key ] = value

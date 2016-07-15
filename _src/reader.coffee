@@ -47,7 +47,7 @@ class NsqReader extends require( "./basic" )
 	_initClient: =>
 		if @client
 			return @client
-		@debug "start reader", @topic, @channel, @config.namespace
+		@warning "start reader", @topic, @channel, @config.namespace,  @config.lookupdHTTPAddresses 
 		@client = new nsq.Reader( @nsAdd( @topic ), @channel, @config )
 
 		@client.on( nsq.Reader.NSQD_CLOSED, @onDisconnect )
@@ -60,7 +60,7 @@ class NsqReader extends require( "./basic" )
 		return @client
 
 	onError: ( err )=>
-		@error "nsq-reader", err
+		@error "nsq-reader", err, err.stack
 		return
 
 	onDiscard: ( msg )=>

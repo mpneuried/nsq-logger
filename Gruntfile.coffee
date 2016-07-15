@@ -2,21 +2,12 @@ module.exports = (grunt) ->
 	# Project configuration.
 	grunt.initConfig
 		pkg: grunt.file.readJSON('package.json')
-		regarde:
+		watch:
 			module:
 				files: ["_src/**/*.coffee"]
-				tasks: [ "coffee:changed" ]
+				tasks: [ "coffee:base" ]
 			
 		coffee:
-			changed:
-				expand: true
-				cwd: '_src'
-				src:	[ '<% print( _.first( ((typeof grunt !== "undefined" && grunt !== null ? (_ref = grunt.regarde) != null ? _ref.changed : void 0 : void 0) || ["_src/nothing"]) ).slice( "_src/".length ) ) %>' ]
-				# template to cut off `_src/` and throw on error on non-regrade call
-				# CF: `_.first( grunt?.regarde?.changed or [ "_src/nothing" ] ).slice( "_src/".length )
-				dest: ''
-				ext: '.js'
-
 			base:
 				expand: true
 				cwd: '_src',
@@ -63,7 +54,8 @@ module.exports = (grunt) ->
 			options:
 				require: [ "should" ]
 				reporter: "spec"
-				bail: false
+				bail: process.env.BAIL or false
+				grep: process.env.GREP
 				timeout: 3000
 				slow: 3
 
@@ -72,45 +64,25 @@ module.exports = (grunt) ->
 				options:
 					env:
 						#NSQERR: true
-						severity_nsq_logger: "error"
-		
-		
-		docker:
-			serverdocs:
-				expand: true
-				src: ["_src/**/*.coffee", "README.md"]
-				dest: "_docs/"
-				options:
-					onlyUpdated: false
-					colourScheme: "autumn"
-					ignoreHidden: false
-					sidebarState: true
-					exclude: false
-					lineNums: true
-					js: []
-					css: []
-					extras: []
-		
+						severity_nsq_logger: process.env.SEVERITY or "error"
 
 	# Load npm modules
-	grunt.loadNpmTasks "grunt-regarde"
+	grunt.loadNpmTasks "grunt-contrib-watch"
 	grunt.loadNpmTasks "grunt-contrib-coffee"
 	grunt.loadNpmTasks "grunt-contrib-clean"
 	grunt.loadNpmTasks "grunt-mocha-cli"
 	grunt.loadNpmTasks "grunt-include-replace"
-	grunt.loadNpmTasks "grunt-docker"
 	grunt.loadNpmTasks "grunt-banner"
 
-	# just a hack until this issue has been fixed: https://github.com/yeoman/grunt-regarde/issues/3
-	grunt.option('force', not grunt.option('force'))
-	
 	# ALIAS TASKS
-	grunt.registerTask "watch", "regarde"
 	grunt.registerTask "default", "build"
-	grunt.registerTask "docs", "docker"
-	grunt.registerTask "clear", [ "clean:base" ]
+	grunt.registerTask "clear", [ "clean:base", "clean:nsq"  ]
 	grunt.registerTask "test", [ "mochacli:main", "clean:nsq" ]
+
+	grunt.registerTask "w", "watch"
+	grunt.registerTask "b", "build"
+	grunt.registerTask "t", "test"
 
 	# build the project
 	grunt.registerTask "build", [ "clear", "coffee:base", "includereplace", "usebanner:js" ]
-	grunt.registerTask "build-dev", [ "clear", "coffee:base", "docs", "test" ]
+	grunt.registerTask "build-dev", [ "clear", "coffee:base", "test" ]

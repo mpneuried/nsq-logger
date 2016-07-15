@@ -7,7 +7,7 @@ config = require( "../config" )
 
 randoms = require( "randoms" )
 
-testServers = require( "./nsq-deamons" )
+testServers = require( "./nsq-daemons" )
 NsqLogger = require( "../." )
 
 [ nsqdHost, nsqdPort ] = testServers.nsqdAddress( "tcp" )?.split( ":" )
@@ -155,4 +155,19 @@ describe "----- nsq-logger TESTS -----", ->
 				return
 			return
 		return
+		
+	
+	describe "Active Tests", ->
+		
+		it "wait for errors", ( done )->
+			@timeout(4000)
+			logger = new NsqLogger( extend( {}, CNF, { active: false} ) )
+			
+			logger.on "error", ( err )->
+				throw err
+				return
+				
+			setTimeout( done, 3000 )
+			return
+			
 	return

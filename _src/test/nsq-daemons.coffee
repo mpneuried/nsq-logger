@@ -9,7 +9,7 @@ _nsqDataPath = pathHelper.resolve( "./.nsqdata/" )
 try
 	fs.mkdirSync( _nsqDataPath )
 
-deamons = [
+daemons = [
 	{
 		"name": "LOOKUP-A"
 		"bin": "nsqlookupd"
@@ -52,22 +52,22 @@ class Deamons extends require( "events" ).EventEmitter
 		return
 	
 	start: ( cb )=>
-		for deamon, idx in deamons
-			@create( deamon, idx )
+		for daemon, idx in daemons
+			@create( daemon, idx )
 
 		setTimeout( cb, 1000 * idx )
 		return
 		
 	lookupdAddresses: ( type="http" )=>
 		_ret = []
-		for deamon in deamons when deamon.bin is "nsqlookupd"
-			_ret.push deamon.args?[ type + "-address" ]
+		for daemon in daemons when daemon.bin is "nsqlookupd"
+			_ret.push daemon.args?[ type + "-address" ]
 		
 		return _ret
 		
 	nsqdAddress: ( type="http" )=>
-		for deamon in deamons when deamon.bin is "nsqd"
-			return deamon.args?[ type + "-address" ]
+		for daemon in daemons when daemon.bin is "nsqd"
+			return daemon.args?[ type + "-address" ]
 		return null
 		
 	
@@ -91,29 +91,29 @@ class Deamons extends require( "events" ).EventEmitter
 				console.log "✅  START #{ @basepath }/#{options.bin} #{_args.join( " " )}" if process.env.NSQLOG
 			else
 				console.log "✅  START #{options.name}"
-			deamon = spawn( "#{ @basepath }/#{options.bin}", _args )
+			daemon = spawn( "#{ @basepath }/#{options.bin}", _args )
 
-			deamon.stdout.on "data", ( data )->
+			daemon.stdout.on "data", ( data )->
 				console.log "LOG #{options.name}:", data.toString() if process.env.NSQLOG
 				return
 				
-			deamon.stderr.on "data", ( data )->
+			daemon.stderr.on "data", ( data )->
 				console.error "ERR #{options.name}:", data.toString() if process.env.NSQERR
 				return
 
-			deamon.on "close", ( data )=>
+			daemon.on "close", ( data )=>
 				console.log "⛔️  STOPPED #{options.name}", arguments
 				@closedOne()
 				return
 			
-			@running.push( deamon )
+			@running.push( daemon )
 			@iRunning++
 			return
 		, 1000 * wait )
 		return
 	
 	stop: ( cb )=>
-		console.log "STOP deamons!"
+		console.log "STOP daemons!"
 		if @iRunning <= 0
 			cb()
 			return

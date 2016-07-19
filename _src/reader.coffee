@@ -47,7 +47,7 @@ class NsqReader extends require( "./basic" )
 	_initClient: =>
 		if @client
 			return @client
-		@warning "start reader", @topic, @channel, @config.namespace,  @config.lookupdHTTPAddresses 
+		@debug "start reader", @topic, @channel, @config.namespace,  @config.lookupdHTTPAddresses 
 		@client = new nsq.Reader( @nsAdd( @topic ), @channel, @config )
 
 		@client.on( nsq.Reader.NSQD_CLOSED, @onDisconnect )
@@ -65,7 +65,7 @@ class NsqReader extends require( "./basic" )
 
 	onDiscard: ( msg )=>
 		@emit( "exceeded", msg.json() )
-		@warning "message exceeded", @topic, msg.json()
+		@info "message exceeded", @topic, msg.json()
 		return
 
 	onMessage: ( msg )=>

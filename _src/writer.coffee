@@ -45,7 +45,7 @@ class NsqWriter extends require( "./basic" )
 		if @client?
 			return @client
 		
-		@client = new nsq.Writer( "127.0.0.1", @config.port, @config )
+		@client = new nsq.Writer( @config.host, @config.port, @config )
 
 		@client.on( nsq.Writer.READY, @onConnect )
 		@client.on( nsq.Writer.CLOSED, @onDisconnect )

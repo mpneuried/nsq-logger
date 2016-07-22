@@ -530,6 +530,7 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.1.2|2016-07-22|Fixed a stupid error with the host config of the writer|
 |0.1.1|2016-07-19|Removed debugging output|
 |0.1.0|2016-07-15|Updated dependencies [Issue#2](https://github.com/mpneuried/nsq-logger/issues/2) and optimized activate [Issue#3](https://github.com/mpneuried/nsq-logger/issues/3)|
 |0.0.7|2016-01-20|Added raw nsqjs Message as last argument to the `message` event |

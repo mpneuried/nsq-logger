@@ -66,7 +66,14 @@ class NsqWriter extends require( "./basic" )
 		if _isString( data )
 			_data = data
 		else
-			_data = JSON.stringify(data)
+			try
+				_data = JSON.stringify(data)
+			catch _err
+				if cb?
+					cb( _err )
+				else
+					@error( "stringify data for topic `#{topic}`", _err )
+				return
 
 		@client.publish @nsAdd( topic ), _data, ( err )=>
 			if err

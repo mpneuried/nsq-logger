@@ -39,7 +39,7 @@ describe "----- nsq-logger TESTS -----", ->
 			return
 		return
 	
-	after: ( done )->
+	after ( done )->
 		testServers.stop( done )
 		return
 	

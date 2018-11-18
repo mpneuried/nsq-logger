@@ -9,15 +9,11 @@ addons:
     - g++-4.8
 language: node_js
 node_js:
-  - 0.10
-  - 0.12
-  - 4.0
-  - 4.4
-  - 5.0
-  - 5.11
-  - 6.0
-  - 6.1
-  - iojs
+  - 4
+  - 6
+  - 8
+  - 10
+  - lts/*
   - node
 before_install:
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi

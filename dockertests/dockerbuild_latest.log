@@ -1,0 +1,56 @@
+Sending build context to Docker daemon  124.9MB
+Step 1/11 : FROM node:latest
+ ---> 3487fb1e4dee
+Step 2/11 : MAINTAINER M. Peter <mp@tcs.de>
+ ---> Using cache
+ ---> f1512d48e440
+Step 3/11 : RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y build-essential
+ ---> Using cache
+ ---> 509b34d3551c
+Step 4/11 : RUN	mkdir -p /app/
+ ---> Using cache
+ ---> bd1b623151e0
+Step 5/11 : WORKDIR /app/
+ ---> Using cache
+ ---> 1c637a739e1c
+Step 6/11 : COPY package.json /app/package.json
+ ---> Using cache
+ ---> 6d3a6407d2c3
+Step 7/11 : RUN npm install
+ ---> Using cache
+ ---> 81f842605e0a
+Step 8/11 : COPY Gruntfile.coffee /app/Gruntfile.coffee
+ ---> Using cache
+ ---> 3af2cc2f598b
+Step 9/11 : COPY _src/ /app/_src/
+ ---> 4028a4ff23b6
+Step 10/11 : RUN npm run build
+ ---> Running in 428a9fc9a18e
+
+> nsq-logger@0.1.4 build /app
+> grunt build
+
+Running "clean:base" (clean) task
+>> 0 paths cleaned.
+
+Running "clean:nsq" (clean) task
+>> 0 paths cleaned.
+
+Running "coffee:base" (coffee) task
+>> 9 files created.
+
+Running "includereplace:pckg" (includereplace) task
+Processed 1 file
+
+Running "usebanner:js" (usebanner) task
+√ grunt-banner completed successfully
+
+Done.
+Removing intermediate container 428a9fc9a18e
+ ---> eb9055bb4214
+Step 11/11 : CMD [ "npm", "run", "test" ]
+ ---> Running in ad43c61bdf93
+Removing intermediate container ad43c61bdf93
+ ---> ec9ca1a3e476
+Successfully built ec9ca1a3e476
+Successfully tagged mpneuried.nodecache.test:latest

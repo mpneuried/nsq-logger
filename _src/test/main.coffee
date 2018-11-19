@@ -61,7 +61,7 @@ describe "----- nsq-logger TESTS -----", ->
 				return
 
 			after ( done )->
-				@timeout( 10000 )
+				@timeout( 20000 )
 				hosts = testServers.lookupdAddresses( "http" )
 				console.log('cleanup hosts ',hosts )
 				testData.cleanup hosts, ->

@@ -1,7 +1,7 @@
 nsq-logger
 ============
 
-[![Build Status](https://secure.travis-ci.org/mpneuried/nsq-logger.png?branch=master)](http://travis-ci.org/mpneuried/nsq-logger)
+[![Build Status](https://secure.travis-ci.org/mpneuried/nsq-logger.png?branch=node4)](http://travis-ci.org/mpneuried/nsq-logger)
 [![Build Status](https://david-dm.org/mpneuried/nsq-logger.png)](https://david-dm.org/mpneuried/nsq-logger)
 [![NPM version](https://badge.fury.io/js/nsq-logger.png)](http://badge.fury.io/js/nsq-logger)
 

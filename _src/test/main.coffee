@@ -15,7 +15,9 @@ NsqLogger = require( "../." )
 CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1
-	logging: {}
+	logging: {
+		severity: "debug"
+	}
 	host: nsqdHost
 	port: parseInt( nsqdPort, 10 )
 	lookupdHTTPAddresses: testServers.lookupdAddresses( "http" )

@@ -116,6 +116,7 @@ class NsqLogger extends require( "./basic" )
 		@Topics.removeListener( "add", @addReader )
 		@Topics.removeListener( "remove", @addReader )
 		@_destroyReaders =>
+			@debug "disconnected"
 			@emit( "disconnected" )
 			return
 		return
@@ -123,11 +124,14 @@ class NsqLogger extends require( "./basic" )
 	destroy: ( cb )=>
 		@warning "destroy logger"
 		if not @ready
+			@debug "not ready to destroy"
+			cb()
 			return
 		
 		@disconnect()
 		
 		@Writer.destroy =>
+			@debug "writer destroyed"
 			@_destroyReaders( cb )
 			return
 			
@@ -187,7 +191,9 @@ class NsqLogger extends require( "./basic" )
 		_count = Object.keys( @READERS ).length
 		
 		for _name, _reader of @READERS
+			@debug "destroy reader: " + _name
 			@READERS[ _name ].destroy =>
+				@debug "reader destryed: " + _name
 				_count--
 				if _count <= 0
 					@removeAllListeners()

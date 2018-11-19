@@ -190,16 +190,14 @@ class NsqLogger extends require( "./basic" )
 		_count = Object.keys( @READERS ).length
 		@warning "destroy #{_count} readers"
 		
-		async.each(
-		@READERS, 
-		( reader, acb ) =>
+		async.each( @READERS, ( reader, acb ) =>
 			@debug "reader destroy: " + _name
 			reader.destroy =>
 				@debug "reader destroyed: " + _name
 				acb()
 				return
-			return,
-		( err ) =>
+			return
+		, ( err ) =>
 			@debug "all readers destroyed"
 			@removeAllListeners()
 			cb()

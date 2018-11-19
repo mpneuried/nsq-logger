@@ -86,6 +86,7 @@ class NsqBasic extends require( "mpbasic" )()
 
 	disconnect: =>
 		@disconnecting = true
+		
 		@client.close()
 		return
 
@@ -123,11 +124,11 @@ class NsqBasic extends require( "mpbasic" )()
 
 	destroy: ( cb )=>
 		if @connected
-			@disconnect()
-			@on "disconnected", ->
+			@once "disconnected", ->
 				@removeAllListeners()
 				cb()
 				return
+			@disconnect()
 			return
 		cb()
 		return

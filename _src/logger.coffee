@@ -6,6 +6,7 @@
 # **npm modules**
 _isArray = require( "lodash/isArray" )
 _isFunction = require( "lodash/isFunction" )
+async = require( "async" )
 
 # **internal modules**
 Config = require "./config"
@@ -190,7 +191,7 @@ class NsqLogger extends require( "./basic" )
 		_count = Object.keys( @READERS ).length
 		@warning "destroy #{_count} readers"
 		
-		async.each( @READERS, ( name, reader, acb ) =>
+		async.eachOf( @READERS, ( reader, name, acb ) =>
 			@debug "reader destroy: " + name
 			reader.destroy =>
 				@debug "reader destroyed: " + name

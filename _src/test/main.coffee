@@ -16,7 +16,7 @@ CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1
 	logging: {
-		severity: "debug"
+		severity: "warning"
 	}
 	host: nsqdHost
 	port: parseInt( nsqdPort, 10 )

@@ -1,7 +1,7 @@
-VERSIONS[1]="argon"
-VERSIONS[2]="boron"
-VERSIONS[3]="carbon"
-VERSIONS[4]="latest"
+# VERSIONS[1]="argon"
+# VERSIONS[2]="boron"
+# VERSIONS[3]="carbon"
+VERSIONS[1]="latest"
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

@@ -86,7 +86,6 @@ class NsqBasic extends require( "mpbasic" )()
 
 	disconnect: =>
 		@disconnecting = true
-		
 		@client.close()
 		return
 

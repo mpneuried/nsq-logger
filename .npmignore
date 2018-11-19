@@ -10,3 +10,4 @@ deploy.json
 .editorconfig
 .travis.yml
 .vscode/
+/dockertests

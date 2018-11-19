@@ -10,7 +10,7 @@ module.exports = ( namespace )->
 	
 	deleteTopic = ( host, topic )->
 		return ( cb )->
-			console.log('          delete topic: ' + topic);
+			#console.log('          delete topic: ' + topic);
 			hyperrequest { url: "http://#{host}/delete_topic", qs: { topic: ( namespace or "" ) + topic } }, ( err, resp )->
 				if resp?.statusCode is 200
 					cb( null, topic )

@@ -2,9 +2,10 @@ os:
   - linux
 language: node_js
 node_js:
+  - 0.10
   - 4
-  - 6
-  - 8
-  - 10
-  - lts/*
-  - node
+  # - 6
+  # - 8
+  # - 10
+  # - lts/*
+  # - node

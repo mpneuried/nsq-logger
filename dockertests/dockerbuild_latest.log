@@ -1,4 +1,4 @@
-Sending build context to Docker daemon  124.9MB
+Sending build context to Docker daemon    125MB
 Step 1/11 : FROM node:latest
  ---> 3487fb1e4dee
 Step 2/11 : MAINTAINER M. Peter <mp@tcs.de>
@@ -14,43 +14,389 @@ Step 5/11 : WORKDIR /app/
  ---> Using cache
  ---> 1c637a739e1c
 Step 6/11 : COPY package.json /app/package.json
- ---> Using cache
- ---> 6d3a6407d2c3
+ ---> 84b7505cf083
 Step 7/11 : RUN npm install
- ---> Using cache
- ---> 81f842605e0a
-Step 8/11 : COPY Gruntfile.coffee /app/Gruntfile.coffee
- ---> Using cache
- ---> 3af2cc2f598b
-Step 9/11 : COPY _src/ /app/_src/
- ---> 4028a4ff23b6
-Step 10/11 : RUN npm run build
- ---> Running in 428a9fc9a18e
+ ---> Running in 2650d58d601d
+[91mnpm WARN deprecated[0m[91m coffee-script@1.10.0: CoffeeScript on NPM has moved to "coffeescript" (no hyphen)
+[0m[91mnpm WARN[0m[91m [0m[91mdeprecated[0m[91m coffee-script@1.12.7: CoffeeScript on NPM has moved to "coffeescript" (no hyphen)
+[0m
+> sse4_crc32@5.3.0 install /app/node_modules/sse4_crc32
+> node-gyp rebuild
 
-> nsq-logger@0.1.4 build /app
-> grunt build
+make: Entering directory '/app/node_modules/sse4_crc32/build'
+  CXX(target) Release/obj.target/crc32c_sse42/src/crc32c_sse42.o
+  AR(target) Release/obj.target/crc32c_sse42.a
+  COPY Release/crc32c_sse42.a
+  CXX(target) Release/obj.target/sse4_crc32/src/crc32c.o
+[91mIn file included from ../node_modules/nan/nan_new.h:189:0,
+                 from ../node_modules/nan/nan.h:222,
+                 from ../src/crc32c.cpp:18:
+../node_modules/nan/nan_implementation_12_inl.h: In static member function 'static Nan::imp::FactoryBase<v8::StringObject>::return_t Nan::imp::Factory<v8::StringObject>::New(v8::Local<v8::String>)':
+../node_modules/nan/nan_implementation_12_inl.h:337:37: warning: 'static v8::Local<v8::Value> v8::StringObject::New(v8::Local<v8::String>)' is deprecated: Use Isolate* version [-Wdeprecated-declarations]
+   return v8::StringObject::New(value).As<v8::StringObject>();
+                                     ^
+In file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:5242:37: note: declared here
+                 static Local<Value> New(Local<String> value));
+                                     ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91mIn file included from ../src/crc32c.cpp:18:0:
+../node_modules/nan/nan.h: In constructor 'Nan::Utf8String::Utf8String(v8::Local<v8::Value>)':
+../node_modules/nan/nan.h:1063:53: warning: 'v8::Local<v8::String> v8::Value::ToString() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+       v8::Local<v8::String> string = from->ToString();
+                                                     ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:10248:15: note: declared here
+ Local<String> Value::ToString() const {
+               ^~~~~
+[0m[91mIn file included from ../src/crc32c.cpp:18:0:
+../node_modules/nan/nan.h:1073:74: warning: 'int v8::String::WriteUtf8(char*, int, int*, int) const' is deprecated: Use Isolate* version [-Wdeprecated-declarations]
+         length_ = string->WriteUtf8(str_, static_cast<int>(len), 0, flags);
+                                                                          ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:2754:21: note: declared here
+                 int WriteUtf8(char* buffer, int length = -1,
+                     ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91m../src/crc32c.cpp: In function 'Nan::NAN_METHOD_RETURN_TYPE calculateCrc(Nan::NAN_METHOD_ARGS_TYPE)':
+../src/crc32c.cpp:195:44: warning: 'bool v8::Value::BooleanValue() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+     useHardwareCrc = info[0]->BooleanValue();
+                                            ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:2568:43: note: declared here
+   V8_DEPRECATED("Use maybe version", bool BooleanValue() const);
+                                           ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91m../src/crc32c.cpp:203:40: warning: 'uint32_t v8::Value::Uint32Value() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+         initCrc = info[2]->Uint32Value();
+                                        ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:2571:47: note: declared here
+   V8_DEPRECATED("Use maybe version", uint32_t Uint32Value() const);
+                                               ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91m../src/crc32c.cpp:210:47: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+         Local<Object> buf = info[1]->ToObject();
+                                               ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+[0m[91m../src/crc32c.cpp:221:52: warning: 'v8::Local<v8::String> v8::Value::ToString() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+         Local<String> strInput = info[1]->ToString();
+                                                    ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:10248:15: note: declared here
+ Local<String> Value::ToString() const {
+               ^~~~~
+[0m[91m../src/crc32c.cpp:224:110: warning: 'int v8::String::Utf8Length() const' is deprecated: Use Isolate version instead [-Wdeprecated-declarations]
+             crc = hwCrc32c(initCrc, (const char *)(*Nan::Utf8String(strInput)), (size_t)strInput->Utf8Length());
+                                                                                                              ^
+In file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:2682:52: note: declared here
+   V8_DEPRECATED("Use Isolate version instead", int Utf8Length() const);
+                                                    ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91m../src/crc32c.cpp:226:110: warning: 'int v8::String::Utf8Length() const' is deprecated: Use Isolate version instead [-Wdeprecated-declarations]
+             crc = swCrc32c(initCrc, (const char *)(*Nan::Utf8String(strInput)), (size_t)strInput->Utf8Length());
+                                                                                                              ^
+In file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../node_modules/nan/nan.h:52,
+                 from ../src/crc32c.cpp:18:
+/root/.node-gyp/11.2.0/include/node/v8.h:2682:52: note: declared here
+   V8_DEPRECATED("Use Isolate version instead", int Utf8Length() const);
+                                                    ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m  SOLINK_MODULE(target) Release/obj.target/sse4_crc32.node
+  COPY Release/sse4_crc32.node
+make: Leaving directory '/app/node_modules/sse4_crc32/build'
 
-Running "clean:base" (clean) task
->> 0 paths cleaned.
+> snappy@5.0.5 install /app/node_modules/snappy
+> node-gyp rebuild
 
-Running "clean:nsq" (clean) task
->> 0 paths cleaned.
-
-Running "coffee:base" (coffee) task
->> 9 files created.
-
-Running "includereplace:pckg" (includereplace) task
-Processed 1 file
-
-Running "usebanner:js" (usebanner) task
-√ grunt-banner completed successfully
-
-Done.
-Removing intermediate container 428a9fc9a18e
- ---> eb9055bb4214
-Step 11/11 : CMD [ "npm", "run", "test" ]
- ---> Running in ad43c61bdf93
-Removing intermediate container ad43c61bdf93
- ---> ec9ca1a3e476
-Successfully built ec9ca1a3e476
-Successfully tagged mpneuried.nodecache.test:latest
+make: Entering directory '/app/node_modules/snappy/build'
+  CXX(target) Release/obj.target/snappy/deps/snappy/snappy-1.1.2/snappy-sinksource.o
+  CXX(target) Release/obj.target/snappy/deps/snappy/snappy-1.1.2/snappy-stubs-internal.o
+  CXX(target) Release/obj.target/snappy/deps/snappy/snappy-1.1.2/snappy.o
+  AR(target) Release/obj.target/deps/snappy/snappy.a
+  COPY Release/snappy.a
+  CXX(target) Release/obj.target/binding/src/binding.o
+[91mIn file included from ../../nan/nan.h:190:0,
+                 from ../src/./binding.h:6,
+                 from ../src/binding.cc:1:
+../../nan/nan_maybe_43_inl.h: In function 'Nan::Maybe<bool> Nan::ForceSet(v8::Local<v8::Object>, v8::Local<v8::Value>, v8::Local<v8::Value>, v8::PropertyAttribute)':
+../../nan/nan_maybe_43_inl.h:88:15: error: 'class v8::Object' has no member named 'ForceSet'
+   return obj->ForceSet(GetCurrentContext(), key, value, attribs);
+               ^~~~~~~~
+[0m[91mIn file included from ../../nan/nan_new.h:189:0,
+                 from ../../nan/nan.h:196,
+                 from ../src/./binding.h:6,
+                 from ../src/binding.cc:1:
+../../nan/nan_implementation_12_inl.h: In static member function 'static Nan::imp::FactoryBase<v8::StringObject>::return_t Nan::imp::Factory<v8::StringObject>::New(v8::Local<v8::String>)':
+../../nan/nan_implementation_12_inl.h:345:37: warning: 'static v8::Local<v8::Value> v8::StringObject::New(v8::Local<v8::String>)' is deprecated: Use Isolate* version [-Wdeprecated-declarations]
+   return v8::StringObject::New(value).As<v8::StringObject>();
+                                     ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:5242:37: note: declared here
+                 static Local<Value> New(Local<String> value));
+                                     ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91mIn file included from ../src/./binding.h:6:0,
+                 from ../src/binding.cc:1:
+../../nan/nan.h: In function 'v8::Local<v8::Value> Nan::MakeCallback(v8::Local<v8::Object>, v8::Local<v8::Function>, int, v8::Local<v8::Value>*)':
+../../nan/nan.h:817:60: warning: 'v8::Local<v8::Value> node::MakeCallback(v8::Isolate*, v8::Local<v8::Object>, v8::Local<v8::Function>, int, v8::Local<v8::Value>*)' is deprecated: Use MakeCallback(..., async_context) [-Wdeprecated-declarations]
+         v8::Isolate::GetCurrent(), target, func, argc, argv);
+                                                            ^
+[0m[91mIn file included from ../src/./binding.h:3:0,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/node.h:172:50: note: declared here
+                 NODE_EXTERN v8::Local<v8::Value> MakeCallback(
+                                                  ^
+/root/.node-gyp/11.2.0/include/node/node.h:91:42: note: in definition of macro 'NODE_DEPRECATED'
+     __attribute__((deprecated(message))) declarator
+                                          ^~~~~~~~~~
+In file included from ../src/./binding.h:6:0,
+                 from ../src/binding.cc:1:
+../../nan/nan.h: In function 'v8::Local<v8::Value> Nan::MakeCallback(v8::Local<v8::Object>, v8::Local<v8::String>, int, v8::Local<v8::Value>*)':
+../../nan/nan.h:831:62: warning: 'v8::Local<v8::Value> node::MakeCallback(v8::Isolate*, v8::Local<v8::Object>, v8::Local<v8::String>, int, v8::Local<v8::Value>*)' is deprecated: Use MakeCallback(..., async_context) [-Wdeprecated-declarations]
+         v8::Isolate::GetCurrent(), target, symbol, argc, argv);
+                                                              ^
+[0m[91mIn file included from ../src/./binding.h:3:0,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/node.h:165:50: note: declared here
+                 NODE_EXTERN v8::Local<v8::Value> MakeCallback(
+                                                  ^
+/root/.node-gyp/11.2.0/include/node/node.h:91:42: note: in definition of macro 'NODE_DEPRECATED'
+     __attribute__((deprecated(message))) declarator
+                                          ^~~~~~~~~~
+In file included from ../src/./binding.h:6:0,
+                 from ../src/binding.cc:1:
+../../nan/nan.h: In function 'v8::Local<v8::Value> Nan::MakeCallback(v8::Local<v8::Object>, const char*, int, v8::Local<v8::Value>*)':
+../../nan/nan.h:845:62: warning: 'v8::Local<v8::Value> node::MakeCallback(v8::Isolate*, v8::Local<v8::Object>, const char*, int, v8::Local<v8::Value>*)' is deprecated: Use MakeCallback(..., async_context) [-Wdeprecated-declarations]
+         v8::Isolate::GetCurrent(), target, method, argc, argv);
+                                                              ^
+In file included from ../src/./binding.h:3:0,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/node.h:158:50: note: declared here
+                 NODE_EXTERN v8::Local<v8::Value> MakeCallback(
+                                                  ^
+/root/.node-gyp/11.2.0/include/node/node.h:91:42: note: in definition of macro 'NODE_DEPRECATED'
+     __attribute__((deprecated(message))) declarator
+                                          ^~~~~~~~~~
+[0m[91mIn file included from ../src/./binding.h:6:0,
+                 from ../src/binding.cc:1:
+../../nan/nan.h: In constructor 'Nan::Utf8String::Utf8String(v8::Local<v8::Value>)':
+../../nan/nan.h:890:53: warning: 'v8::Local<v8::String> v8::Value::ToString() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+       v8::Local<v8::String> string = from->ToString();
+                                                     ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10248:15: note: declared here
+ Local<String> Value::ToString() const {
+               ^~~~~
+[0m[91mIn file included from ../src/./binding.h:6:0,
+                 from ../src/binding.cc:1:
+../../nan/nan.h:900:74: warning: 'int v8::String::WriteUtf8(char*, int, int*, int) const' is deprecated: Use Isolate* version [-Wdeprecated-declarations]
+         length_ = string->WriteUtf8(str_, static_cast<int>(len), 0, flags);
+                                                                          ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:2754:21: note: declared here
+                 int WriteUtf8(char* buffer, int length = -1,
+                     ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91mIn file included from ../src/./binding.h:6:0,
+                 from ../src/binding.cc:1:
+../../nan/nan.h: In member function 'v8::Local<v8::Value> Nan::Callback::Call_(v8::Isolate*, v8::Local<v8::Object>, int, v8::Local<v8::Value>*) const':
+../../nan/nan.h:1463:5: warning: 'v8::Local<v8::Value> node::MakeCallback(v8::Isolate*, v8::Local<v8::Object>, v8::Local<v8::Function>, int, v8::Local<v8::Value>*)' is deprecated: Use MakeCallback(..., async_context) [-Wdeprecated-declarations]
+     ));
+     ^
+[0m[91mIn file included from ../src/./binding.h:3:0,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/node.h:172:50: note: declared here
+                 NODE_EXTERN v8::Local<v8::Value> MakeCallback(
+                                                  ^
+/root/.node-gyp/11.2.0/include/node/node.h:91:42: note: in definition of macro 'NODE_DEPRECATED'
+     __attribute__((deprecated(message))) declarator
+                                          ^~~~~~~~~~
+[0m[91m../src/binding.cc: In function 'Nan::NAN_METHOD_RETURN_TYPE nodesnappy::Compress(Nan::NAN_METHOD_ARGS_TYPE)':
+../src/binding.cc:115:51: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+   if (node::Buffer::HasInstance(info[0]->ToObject())) {
+                                                   ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+../src/binding.cc:116:54: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+     v8::Local<v8::Object> object = info[0]->ToObject();
+                                                      ^
+In file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+[0m[91m../src/binding.cc:121:52: warning: 'v8::Local<v8::String> v8::Value::ToString() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+     v8::String::Utf8Value param1(info[0]->ToString());
+                                                    ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10248:15: note: declared here
+ Local<String> Value::ToString() const {
+               ^~~~~
+[0m[91m../src/binding.cc:121:53: warning: 'v8::String::Utf8Value::Utf8Value(v8::Local<v8::Value>)' is deprecated: Use Isolate version [-Wdeprecated-declarations]
+     v8::String::Utf8Value param1(info[0]->ToString());
+                                                     ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:2992:28: note: declared here
+                   explicit Utf8Value(Local<v8::Value> obj));
+                            ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91m../src/binding.cc: In function 'Nan::NAN_METHOD_RETURN_TYPE nodesnappy::CompressSync(Nan::NAN_METHOD_ARGS_TYPE)':
+../src/binding.cc:142:51: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+   if (node::Buffer::HasInstance(info[0]->ToObject())) {
+                                                   ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+[0m[91m../src/binding.cc:143:54: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+     v8::Local<v8::Object> object = info[0]->ToObject();
+                                                      ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+[0m[91m../src/binding.cc:148:52: warning: 'v8::Local<v8::String> v8::Value::ToString() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+     v8::String::Utf8Value param1(info[0]->ToString());
+                                                    ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10248:15: note: declared here
+ Local<String> Value::ToString() const {
+               ^~~~~
+[0m[91m../src/binding.cc:148:53: warning: 'v8::String::Utf8Value::Utf8Value(v8::Local<v8::Value>)' is deprecated: Use Isolate version [-Wdeprecated-declarations]
+     v8::String::Utf8Value param1(info[0]->ToString());
+                                                     ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/v8.h:26:0,
+                 from /root/.node-gyp/11.2.0/include/node/node.h:63,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:2992:28: note: declared here
+                   explicit Utf8Value(Local<v8::Value> obj));
+                            ^
+/root/.node-gyp/11.2.0/include/node/v8config.h:326:3: note: in definition of macro 'V8_DEPRECATED'
+   declarator __attribute__((deprecated(message)))
+   ^~~~~~~~~~
+[0m[91m../src/binding.cc: In function 'Nan::NAN_METHOD_RETURN_TYPE nodesnappy::IsValidCompressed(Nan::NAN_METHOD_ARGS_TYPE)':
+../src/binding.cc:161:52: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+   v8::Local<v8::Object> object = info[0]->ToObject();
+                                                    ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+[0m[91m../src/binding.cc: In function 'Nan::NAN_METHOD_RETURN_TYPE nodesnappy::IsValidCompressedSync(Nan::NAN_METHOD_ARGS_TYPE)':
+../src/binding.cc:181:52: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+   v8::Local<v8::Object> object = info[0]->ToObject();
+                                                    ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+[0m[91m../src/binding.cc: In function 'Nan::NAN_METHOD_RETURN_TYPE nodesnappy::UncompressSync(Nan::NAN_METHOD_ARGS_TYPE)':
+../src/binding.cc:218:52: warning: 'v8::Local<v8::Object> v8::Value::ToObject() const' is deprecated: Use maybe version [-Wdeprecated-declarations]
+   v8::Local<v8::Object> object = info[0]->ToObject();
+                                                    ^
+[0m[91mIn file included from /root/.node-gyp/11.2.0/include/node/node.h:63:0,
+                 from ../src/./binding.h:3,
+                 from ../src/binding.cc:1:
+/root/.node-gyp/11.2.0/include/node/v8.h:10254:15: note: declared here
+ Local<Object> Value::ToObject() const {
+               ^~~~~
+[0mbinding.target.mk:106: recipe for target 'Release/obj.target/binding/src/binding.o' failed
+[91mmake: *** [Release/obj.target/binding/src/binding.o] Error 1
+[0mmake: Leaving directory '/app/node_modules/snappy/build'
+[91mgyp[0m[91m [0m[91mERR![0m[91m [0m[91mbuild error[0m[91m 
+[0m[91mgyp[0m[91m [0m[91mERR! [0m[91mstack[0m[91m Error: `make` failed with exit code: 2
+[0m[91mgyp[0m[91m [0m[91mERR! [0m[91mstack[0m[91m     at ChildProcess.onExit (/usr/local/lib/node_modules/npm/node_modules/node-gyp/lib/build.js:262:23)
+[0m[91mgyp[0m[91m [0m[91mERR![0m[91m [0m[91mstack[0m[91m     at ChildProcess.emit (events.js:182:13)
+[0m[91mgyp[0m[91m [0m[91mERR![0m[91m stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:254:12)
+[0m[91mgyp [0m[91mERR! System Linux 4.9.93-linuxkit-aufs
+gyp ERR! command "/usr/local/bin/node" "/usr/local/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" "rebuild"
+gyp ERR! cwd /app/node_modules/snappy
+gyp ERR! node -v v11.2.0
+gyp ERR! node-gyp -v v3.8.0
+gyp ERR! not ok 
+[0m[91mnpm[0m[91m [0m[91mERR![0m[91m [0m[91mcode ELIFECYCLE
+[0m[91mnpm [0m[91mERR! [0m[91merrno 1
+[0m[91mnpm[0m[91m [0m[91mERR! snappy@5.0.5 install: `node-gyp rebuild`
+npm[0m[91m [0m[91mERR! Exit status 1
+[0m[91mnpm[0m[91m [0m[91mERR! 
+[0m[91mnpm [0m[91mERR![0m[91m Failed at the snappy@5.0.5 install script.
+[0m[91mnpm[0m[91m [0m[91mERR![0m[91m This is probably not a problem with npm. There is likely additional logging output above.
+[0m[91m
+[0m[91mnpm ERR! A complete log of this run can be found in:
+npm[0m[91m ERR![0m[91m     /root/.npm/_logs/2018-11-19T20_55_57_139Z-debug.log
+[0m

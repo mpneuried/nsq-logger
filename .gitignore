@@ -19,3 +19,4 @@ deploy.json
 *.js
 /node_modules
 .vscode/
+/dockertests/*.log

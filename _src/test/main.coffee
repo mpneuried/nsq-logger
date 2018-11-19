@@ -60,8 +60,12 @@ describe "----- nsq-logger TESTS -----", ->
 
 			after ( done )->
 				@timeout( 10000 )
-				testData.cleanup testServers.lookupdAddresses( "http" ), ->
+				hosts = testServers.lookupdAddresses( "http" )
+				console.log('cleanup hosts ',hosts )
+				testData.cleanup hosts, ->
+					console.log('cleanup done' )
 					logger.destroy ->
+						console.log('logger destroy done' )
 						done()
 						return
 				return

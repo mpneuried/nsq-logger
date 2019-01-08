@@ -11,7 +11,7 @@ testServers = require( "./nsq-daemons" )
 NsqLogger = require( "../." )
 
 [ nsqdHost, nsqdPort ] = testServers.nsqdAddress( "tcp" )?.split( ":" )
-
+NO_DEAMONS = process.env.NO_DEAMONS != null ? true : false 
 CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1
@@ -35,6 +35,10 @@ namespaces = [ null, "mochatestA_", "mochatestB_" ]
 describe "----- nsq-logger TESTS -----", ->
 	
 	before ( done )->
+		if NO_DEAMONS
+			done()
+			return
+		
 		@timeout( 10000 )
 		testServers.start ->
 			done()
@@ -42,6 +46,9 @@ describe "----- nsq-logger TESTS -----", ->
 		return
 	
 	after ( done )->
+		if NO_DEAMONS
+			done()
+			return
 		testServers.stop( done )
 		return
 	
@@ -59,7 +66,7 @@ describe "----- nsq-logger TESTS -----", ->
 				writer.connect()
 				done()
 				return
-
+			
 			after ( done )->
 				@timeout( 20000 )
 				hosts = testServers.lookupdAddresses( "http" )
@@ -206,5 +213,4 @@ describe "----- nsq-logger TESTS -----", ->
 		
 		return
 		
-			
 	return

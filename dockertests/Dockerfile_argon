@@ -10,6 +10,11 @@ COPY package.json /app/package.json
 RUN npm install
 COPY Gruntfile.coffee /app/Gruntfile.coffee
 
+RUN npm install -g node-gyp
+WORKDIR /app/node_modules/nsqjs/node_modules/snappystream/node_modules/snappy
+RUN node-gyp rebuild
+WORKDIR /app/
+
 COPY _src/ /app/_src/
 
 RUN npm run build

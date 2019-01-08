@@ -1,0 +1,6 @@
+.*
+.vscode/
+.nsqdata/
+test/
+*.js
+dockertests/

@@ -1,4 +1,4 @@
-VERSIONS[1]="argon"
+# VERSIONS[1]="argon"
 # VERSIONS[2]="boron"
 # VERSIONS[3]="carbon"
 VERSIONS[4]="latest"
@@ -23,8 +23,8 @@ do
 	   DIMG=`head -n 1 $SCRIPTDIR/$DFile`
 	   echo "\n-------------\nDocker Test ($DIMG)\n-------------"
 	   BUILDLOGS="$DIR/dockerbuild_$version.log"
-	   docker build -t=mpneuried.nodecache.test:$version -f=$SCRIPTDIR/$DFile . > $BUILDLOGS
-	   docker run --rm mpneuried.nodecache.test:$version >&2
+	   docker build -t=mpneuried.nsqlogger.test:$version -f=$SCRIPTDIR/$DFile . > $BUILDLOGS
+	   #docker run --rm mpneuried.nsqlogger.test:$version >&2
    else
 	   echo "Dockerfile '$DFile' not found"
    fi

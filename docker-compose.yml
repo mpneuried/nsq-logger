@@ -1,0 +1,45 @@
+version: '3'
+services:
+  nsqlookupda:
+    image: nsqio/nsq:v0.3.8
+    command: /nsqlookupd --http-address=0.0.0.0:4177 --tcp-address=0.0.0.0:4176
+    ports:
+      - "4177:4177"
+      - "4176:4176"
+  nsqlookupdb:
+    image: nsqio/nsq:v0.3.8
+    command: /nsqlookupd --http-address=0.0.0.0:4179 --tcp-address=0.0.0.0:4178
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+  nsqd:
+    image: nsqio/nsq:v0.3.8
+    command: /nsqd  --http-address=0.0.0.0:4157 --tcp-address=0.0.0.0:4156 --lookupd-tcp-address=nsqlookupda:4176 --lookupd-tcp-address=nsqlookupdb:4178
+    depends_on:
+      - nsqlookupda
+      - nsqlookupdb
+    ports:
+      - "4157:4157"
+      - "4156:4156"
+  nsqadmin:
+    image: nsqio/nsq:v0.3.8
+    command: /nsqadmin --lookupd-http-address=nsqlookupda:4177 --lookupd-http-address=nsqlookupdb:4179
+    depends_on:
+      - nsqlookupda
+      - nsqlookupdb
+    ports:
+      - "4171:4171"
+
+  test:
+    environment:
+      - NSQ_LOOKUP_A_HOST=nsqlookupda
+      - NSQ_LOOKUP_B_HOST=nsqlookupdb
+      - NSQ_HOST=nsqd
+      - NO_DEAMONS=1
+    depends_on:
+      - nsqlookupda
+      - nsqlookupdb
+      - nsqd
+    build:
+      context: .
+      dockerfile: Dockerfile

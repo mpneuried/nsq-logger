@@ -9,28 +9,32 @@ _nsqDataPath = pathHelper.resolve( "./.nsqdata/" )
 try
 	fs.mkdirSync( _nsqDataPath )
 
+LOOKUP_A_HOST = process.env.NSQ_LOOKUP_A_HOST || "127.0.0.1"
+LOOKUP_B_HOST = process.env.NSQ_LOOKUP_B_HOST || "127.0.0.1"
+NSQ_HOST = process.env.NSQ_HOST || "127.0.0.1"
+
 daemons = [
 	{
 		"name": "LOOKUP-A"
 		"bin": "nsqlookupd"
 		"args": {
-			"http-address": "0.0.0.0:4177"
-			"tcp-address": "0.0.0.0:4176"
+			"http-address": LOOKUP_A_HOST + ":4177"
+			"tcp-address": LOOKUP_A_HOST + ":4176"
 		}
 	},{
 		"name": "LOOKUP-B"
 		"bin": "nsqlookupd"
 		"args": {
-			"http-address": "0.0.0.0:4179"
-			"tcp-address": "0.0.0.0:4178"
+			"http-address": LOOKUP_B_HOST + ":4179"
+			"tcp-address": LOOKUP_B_HOST + ":4178"
 		}
 	},{
 		"name": "NSQ"
 		"bin": "nsqd"
 		"args": {
-			"http-address": "0.0.0.0:4157"
-			"tcp-address": "0.0.0.0:4156"
-			"lookupd-tcp-address": [ "0.0.0.0:4176", "0.0.0.0:4178" ]
+			"http-address": NSQ_HOST + ":4157"
+			"tcp-address": NSQ_HOST + ":4156"
+			"lookupd-tcp-address": [ LOOKUP_A_HOST + ":4176", LOOKUP_B_HOST + ":4178" ]
 			"data-path": _nsqDataPath
 		}
 	}
@@ -102,6 +106,8 @@ class Deamons extends require( "events" ).EventEmitter
 				return
 
 			daemon.on "close", ( data )=>
+				console.log('data',data);
+				
 				console.log "⛔️  STOPPED #{options.name}", arguments
 				@closedOne()
 				return

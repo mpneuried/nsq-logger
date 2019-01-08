@@ -11,7 +11,9 @@ testServers = require( "./nsq-daemons" )
 NsqLogger = require( "../." )
 
 [ nsqdHost, nsqdPort ] = testServers.nsqdAddress( "tcp" )?.split( ":" )
-NO_DEAMONS = process.env.NO_DEAMONS != null ? true : false 
+NO_DEAMONS = if process.env.NO_DEAMONS then true else false
+console.log('NO_DEAMONS',NO_DEAMONS, process.env.NO_DEAMONS);
+
 CNF =
 	clientId: "mochaTest"
 	lookupdPollInterval: 1

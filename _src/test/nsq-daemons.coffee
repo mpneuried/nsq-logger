@@ -9,9 +9,9 @@ _nsqDataPath = pathHelper.resolve( "./.nsqdata/" )
 try
 	fs.mkdirSync( _nsqDataPath )
 
-LOOKUP_A_HOST = process.env.NSQ_LOOKUP_A_HOST || "127.0.0.1"
-LOOKUP_B_HOST = process.env.NSQ_LOOKUP_B_HOST || "127.0.0.1"
-NSQ_HOST = process.env.NSQ_HOST || "127.0.0.1"
+LOOKUP_A_HOST = process.env.NSQ_LOOKUP_A_HOST || "0.0.0.0"
+LOOKUP_B_HOST = process.env.NSQ_LOOKUP_B_HOST || "0.0.0.0"
+NSQ_HOST = process.env.NSQ_HOST || "0.0.0.0"
 
 daemons = [
 	{

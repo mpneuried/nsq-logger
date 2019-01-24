@@ -9,32 +9,25 @@ _nsqDataPath = pathHelper.resolve( "./.nsqdata/" )
 try
 	fs.mkdirSync( _nsqDataPath )
 
-LOOKUP_A_HOST = process.env.NSQ_LOOKUP_A_HOST || "0.0.0.0"
-LOOKUP_B_HOST = process.env.NSQ_LOOKUP_B_HOST || "0.0.0.0"
-NSQ_HOST = process.env.NSQ_HOST || "0.0.0.0"
+LOOKUP_A_HOST = process.env.NSQ_LOOKUP_A_HOST || "localhost"
+LOOKUP_B_HOST = process.env.NSQ_LOOKUP_B_HOST || "localhost"
+NSQ_HOST = process.env.NSQ_HOST || "localhost"
 
 daemons = [
 	{
 		"name": "LOOKUP-A"
 		"bin": "nsqlookupd"
 		"args": {
-			"http-address": LOOKUP_A_HOST + ":4177"
-			"tcp-address": LOOKUP_A_HOST + ":4176"
-		}
-	},{
-		"name": "LOOKUP-B"
-		"bin": "nsqlookupd"
-		"args": {
-			"http-address": LOOKUP_B_HOST + ":4179"
-			"tcp-address": LOOKUP_B_HOST + ":4178"
+			"http-address": LOOKUP_A_HOST + ":4161"
+			"tcp-address": LOOKUP_A_HOST + ":4160"
 		}
 	},{
 		"name": "NSQ"
 		"bin": "nsqd"
 		"args": {
-			"http-address": NSQ_HOST + ":4157"
-			"tcp-address": NSQ_HOST + ":4156"
-			"lookupd-tcp-address": [ LOOKUP_A_HOST + ":4176", LOOKUP_B_HOST + ":4178" ]
+			"http-address": NSQ_HOST + ":4151"
+			"tcp-address": NSQ_HOST + ":4150"
+			"lookupd-tcp-address": [ LOOKUP_A_HOST + ":4160" ]
 			"data-path": _nsqDataPath
 		}
 	}

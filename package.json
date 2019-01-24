@@ -1,6 +1,6 @@
 {
   "name": "nsq-logger",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A nsq reader factory to handle readers multiple topics based on the `nsq-topics` module",
   "keywords": [],
   "homepage": "https://github.com/mpneuried/nsq-logger",
@@ -29,9 +29,9 @@
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
     "mpbasic": "0.0.x",
-    "nsq-topics": "0.0.6",
+    "nsq-topics": "1.0.0",
     "async": "^2.6.1",
-    "nsqjs": "0.10.x"
+    "nsqjs": "0.12.x"
   },
   "devDependencies": {
     "grunt": "1.x",

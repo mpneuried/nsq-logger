@@ -10,4 +10,4 @@ node_js:
   - lts/*
   - node
 script:
-  - ./test.sh
+  - test.sh

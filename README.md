@@ -530,6 +530,7 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|2.1.0|2019-01-25|compatibility with nsq < and > 1.x|
 |2.0.2|2019-01-25|finally a working travis test|
 |2.0.1|2019-01-25|fixed broken build|
 |2.0.0|2019-01-25|update to nsq 1.x by updating nsqjs and use nsq-topics 1.x|

@@ -1,19 +1,19 @@
 version: '3'
 services:
   nsqlookupda:
-    image: nsqio/nsq:v1.1.0
+    image: nsqio/nsq:v${NSQ_VERSION-1.1.0}
     command: /nsqlookupd --broadcast-address ${HOST-nsqlookupda} --http-address=0.0.0.0:4177 --tcp-address=0.0.0.0:4176
     ports:
       - "4177:4177"
       - "4176:4176"
   nsqlookupdb:
-    image: nsqio/nsq:v1.1.0
+    image: nsqio/nsq:v${NSQ_VERSION-1.1.0}
     command: /nsqlookupd --broadcast-address ${HOST-nsqlookupdb} --http-address=0.0.0.0:4179 --tcp-address=0.0.0.0:4178
     ports:
       - "4179:4179"
       - "4178:4178"
   nsqd:
-    image: nsqio/nsq:v1.1.0
+    image: nsqio/nsq:v${NSQ_VERSION-1.1.0}
     command: /nsqd --broadcast-address ${HOST-nsqd} --http-address=0.0.0.0:4157 --tcp-address=0.0.0.0:4156 --lookupd-tcp-address=nsqlookupda:4176 --lookupd-tcp-address=nsqlookupdb:4178
     depends_on:
       - nsqlookupda
@@ -22,7 +22,7 @@ services:
       - "4157:4157"
       - "4156:4156"
   nsqadmin:
-    image: nsqio/nsq:v1.1.0
+    image: nsqio/nsq:v${NSQ_VERSION-1.1.0}
     command: /nsqadmin --lookupd-http-address=nsqlookupda:4177 --lookupd-http-address=nsqlookupdb:4179
     depends_on:
       - nsqlookupda

@@ -2,6 +2,9 @@ services:
   - docker
 os:
   - linux
+env:
+  - NSQ_VERSION=0.3.8
+  - NSQ_VERSION=1.1.0
 language: node_js
 node_js:
   - 6

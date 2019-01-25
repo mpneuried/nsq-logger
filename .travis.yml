@@ -16,6 +16,7 @@ before_script:
   - export NSQ_LOOKUP_B_HOST=$HOST
   - export NSQ_HOST=$HOST
   - export NO_DEAMONS=1
+  - npm run build
 after_script:
   - docker-compose stop
   - docker-compose rm -f

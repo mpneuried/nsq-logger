@@ -530,6 +530,7 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|2.0.1|2019-01-25|fixed broken build|
 |2.0.0|2019-01-25|update to nsq 1.x by updating nsqjs and use nsq-topics 1.x|
 |1.0.0|2019-01-08|Make the module compatible with node:10 but no longer compatible with node < 5|
 |0.1.3|2017-07-25|Small fix to catch JSON stringify errors within `Writer.publish`|

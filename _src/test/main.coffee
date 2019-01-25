@@ -29,6 +29,7 @@ CNF =
 logger = null
 writer = null
 config = null
+console.log('CNF',CNF);
 
 
 namespaces = [ null, "mochatestA_", "mochatestB_" ]
@@ -50,8 +51,12 @@ describe "----- nsq-logger TESTS -----", ->
 	after ( done )->
 		if NO_DEAMONS
 			done()
+			process.exit(0)
 			return
-		testServers.stop( done )
+		testServers.stop ->
+			done()
+			process.exit(0)
+			return
 		return
 	
 	namespaces.forEach ( namespace )->

@@ -1,3 +1,5 @@
+services:
+  - docker
 os:
   - linux
 language: node_js
@@ -7,5 +9,5 @@ node_js:
   - 10
   - lts/*
   - node
-before_script:
-  - "npm run build"
+script:
+  - ./test.sh

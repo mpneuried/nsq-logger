@@ -1,6 +1,6 @@
 {
   "name": "nsq-logger",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A nsq reader factory to handle readers multiple topics based on the `nsq-topics` module",
   "keywords": [],
   "homepage": "https://github.com/mpneuried/nsq-logger",
@@ -42,7 +42,6 @@
     "grunt-include-replace": "5.x",
     "grunt-mocha-cli": "4.x",
     "hyperrequest": "^0.1.4",
-    "nsq-bundle": "2.0.x",
     "randoms": "0.0.x",
     "should": "13.x"
   }

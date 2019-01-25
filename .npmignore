@@ -14,3 +14,4 @@ deploy.json
 Dockerfile
 docker-compose.*
 .*
+*.sh

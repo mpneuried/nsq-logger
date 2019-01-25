@@ -10,7 +10,7 @@ node_js:
   - lts/*
   - node
 before_script:
-  - export HOST=$( ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+  - export HOST=$( ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
   - docker-compose up -d
   - export NSQ_LOOKUP_A_HOST=$HOST
   - export NSQ_LOOKUP_B_HOST=$HOST

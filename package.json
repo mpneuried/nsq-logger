@@ -20,7 +20,6 @@
     "build": "grunt build",
     "grunt": "grunt",
     "nsqlookupd": "nsqlookupd",
-    "prepublishOnly": "npm run check",
     "postversion": "git push origin; git push --tags"
   },
   "engines": {

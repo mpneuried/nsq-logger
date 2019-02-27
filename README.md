@@ -530,6 +530,7 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|2.2.1|2019-02-27|fixed package lock file|
 |2.2.0|2019-02-27|added option to autoconnect logger and writer on init|
 |2.1.0|2019-01-25|compatibility with nsq < and > 1.x|
 |2.0.2|2019-01-25|finally a working travis test|

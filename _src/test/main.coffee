@@ -70,7 +70,7 @@ describe "----- nsq-logger TESTS -----", ->
 
 				writer = logger.Writer
 				config = logger.config
-				writer.connect()
+				#writer.connect()
 				done()
 				return
 			

@@ -16,6 +16,8 @@ DEFAULTS =
 	active: true
 	# **clientId** *String|Null* An identifier used to disambiguate this client.
 	clientId: null
+	# **autoconnect** *Boolean* Run connect on start
+	autoconnect: true
 	# **namespace** *String* A namespace for the topics. This will be added/removed transparent to the topics. So only topics within this namespace a relevant.
 	namespace: null
 	
@@ -57,6 +59,7 @@ DEFAULTS =
 	deflate: false
 	# **deflateLevel** *Number* Use zlib Deflate compression level.
 	deflateLevel: 6
+	
 
 	logging:
 		severity: process.env[ "severity" ] or process.env[ "severity_nsq_logger"] or "warning"

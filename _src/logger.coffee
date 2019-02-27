@@ -28,6 +28,8 @@ class NsqLogger extends require( "./basic" )
 			ignoreTopics: null
 			# **namespace** *String* A namespace for the topics. This will be added/removed transparent to the topics. So only topics within this namespace a relevant.
 			namespace: null
+			# **autoconnect** *Boolean* Run connect on start
+			autoconnect: true
 
 	constructor: ( options )->
 		
@@ -51,8 +53,14 @@ class NsqLogger extends require( "./basic" )
 			if not _topicsInst?
 				_topicsInst = new Topics( @config )
 			return _topicsInst
-			
-		@_start()
+		
+		@connecting = false
+		@once "ready", =>
+			@connecting = false
+			return
+		
+		if @config.autoconnect
+			@connect()
 		return
 
 	_start: =>
@@ -103,6 +111,10 @@ class NsqLogger extends require( "./basic" )
 	connect: =>
 		if not @config.active
 			return
+		# prevent double connect
+		if @connecting is true
+			return
+		@connecting = true
 		
 		@Writer.connect()
 		@Topics.activate()

@@ -63,6 +63,7 @@ writer.publish( "topic23", "Do some Stuff!" );
 
 - **clientId** : *( `String|Null` required )* An identifier used to disambiguate this client.
 - **active** : *( `Boolean` default=true )* Configuration to (en/dis)abel the nsq recorder
+- **autoconnect** : *( `Boolean` default=true )* Run connect on start
 - **namespace** : *( `String|Null` default=null )* Internally prefix the nsq topics. This will be handled transparent, but with this it's possible to separate different environments from each other. E.g. you can run a "staging" and "live" environment on one nsq cluster.
 - **loggerChannel** : *( `String` default="nsqlogger" )* The channel name for the logger to each topic
 - **exceededTopic** : *( `String` default="_exceeded" )* A topic name, that will store exceeded messages.
@@ -80,7 +81,6 @@ writer.publish( "topic23", "Do some Stuff!" );
 - **port** : *( `Number` default=4150 )* Port of a nsqd
 - **deflate** : *( `Boolean` default=false )* Use zlib Deflate compression.
 - **deflateLevel** : *( `Number` default=6 )* Use zlib Deflate compression level.
-
 
 ## Methods
 
@@ -530,6 +530,7 @@ The writer is connected to `nsqd`
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|2.2.0|2019-02-27|added option to autoconnect logger and writer on init|
 |2.1.0|2019-01-25|compatibility with nsq < and > 1.x|
 |2.0.2|2019-01-25|finally a working travis test|
 |2.0.1|2019-01-25|fixed broken build|
